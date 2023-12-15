@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template, request, redirect, url_for
+from flask import Flask, jsonify, render_template, request, redirect, url_for, flash
 from flask_pymongo import PyMongo
 from dotenv import load_dotenv
 import os
@@ -7,6 +7,7 @@ import os
 load_dotenv()
 
 app = Flask(__name__)
+app.secret_key = os.getenv('SECRET_KEY')
 
 # Configuración de la base de datos MongoDB desde la variable de entorno
 app.config['MONGO_URI'] = os.getenv('MONGO_URI')
@@ -25,7 +26,7 @@ def agregar_trailer():
     if request.method == 'POST':
         # Obtener los datos del formulario
         matricula = request.form.get('matricula')
-        ejes = int(request.form.get('ejes'))
+        Ejes = int(request.form.get('Ejes'))
         marca = request.form.get('marca')
         modelo = request.form.get('modelo')
         color = request.form.get('color')
@@ -34,7 +35,7 @@ def agregar_trailer():
         # Crear un nuevo documento para MongoDB
         nuevo_trailer = {
             'matricula': matricula,
-            'ejes': ejes,
+            'Ejes': Ejes,
             'marca': marca,
             'modelo': modelo,
             'color': color,
@@ -43,7 +44,7 @@ def agregar_trailer():
 
         # Insertar el nuevo trailer en la colección "trailer"
         mongo.db.trailer.insert_one(nuevo_trailer)
-
+        flash('Trailer agregado correctamente', 'success')
         # Redirigir a la página principal después de agregar el trailer
         return redirect(url_for('index'))
     
@@ -66,4 +67,5 @@ def test_mongo_connection():
         return jsonify({'message': 'Error en la conexión a MongoDB', 'error': str(e)})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5001)
+
