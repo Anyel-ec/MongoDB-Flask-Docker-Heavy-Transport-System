@@ -80,8 +80,12 @@
                     </div>
                     <div class="row">
                         <div class="col-6">
-                            <label for="color" class="form-label">Color</label>
-                            <input type="text" class="form-control" id="color" name="color" required>
+                            <label for="color" class="form-label">Color:</label>
+                            <select class="form-select" name="color" id="color">
+                                {% for color in colores %}
+                                <option value="{{ color._id }}">{{ color.nombre }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                         <div class="col-6">
                             <label for="capacidadCarga" class="form-label">Capacidad de Carga</label>
@@ -97,8 +101,8 @@
                         <div class="col-md-6">
                         </div>
                     </div>
-                    
-                    
+
+
                 </form>
             </div>
         </div>

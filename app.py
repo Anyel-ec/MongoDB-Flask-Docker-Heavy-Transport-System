@@ -2,6 +2,8 @@ from flask import Flask, jsonify, render_template, request, redirect, url_for, f
 from flask_pymongo import PyMongo
 from dotenv import load_dotenv
 import os
+from bson import ObjectId
+
 
 # Cargar variables de entorno desde el archivo .env
 load_dotenv()
@@ -14,12 +16,35 @@ app.config['MONGO_URI'] = os.getenv('MONGO_URI')
 mongo = PyMongo(app)
 
 
+
 @app.route('/')
 def index():
     # Obtener los datos de la colección "trailer"
     trailers = mongo.db.trailer.find()
+
+    # Obtener los datos de la colección "colores"
+    colores = {color['_id']: color['nombre'] for color in mongo.db.colores.find()}
+
+    # Combinar los datos de las dos colecciones
+    trailers_con_colores = []
+    for trailer in trailers:
+        color_id = trailer.get('color_id')
+        color_nombre = colores.get(color_id, 'Color Desconocido')
+        trailer_con_color = {
+            'matricula': trailer['matricula'],
+            'Ejes': trailer['Ejes'],
+            'marca': trailer['marca'],
+            'modelo': trailer['modelo'],
+            'color': color_nombre,
+            'capacidad_carga': trailer['capacidad_carga']
+        }
+        trailers_con_colores.append(trailer_con_color)
+
     # Renderizar la plantilla y pasar los datos a la misma
-    return render_template('index.html', trailers=trailers)
+    return render_template('index.html', trailers=trailers_con_colores)
+
+
+
 
 @app.route('/agregar_trailer', methods=['POST'])
 def agregar_trailer():
@@ -29,16 +54,16 @@ def agregar_trailer():
         Ejes = int(request.form.get('Ejes'))
         marca = request.form.get('marca')
         modelo = request.form.get('modelo')
-        color = request.form.get('color')
+        color_id = int(request.form.get('color'))  # Obtener el ID del color como entero
         capacidad_carga = int(request.form.get('capacidadCarga'))
 
-        # Crear un nuevo documento para MongoDB
+        # Crear un nuevo documento para MongoDB con la referencia al color
         nuevo_trailer = {
             'matricula': matricula,
             'Ejes': Ejes,
             'marca': marca,
             'modelo': modelo,
-            'color': color,
+            'color_id': color_id,
             'capacidad_carga': capacidad_carga
         }
 
@@ -47,13 +72,18 @@ def agregar_trailer():
         flash('Trailer agregado correctamente', 'success')
         # Redirigir a la página principal después de agregar el trailer
         return redirect(url_for('index'))
-    
+
+   
 
 
 # Nueva ruta para renderizar la plantilla agregarTrailer.html
 @app.route('/formulario_agregar_trailer')
 def formulario_agregar_trailer():
-    return render_template('agregarTrailer.html')
+    # Obtener los colores desde la colección "colores"
+    colores = mongo.db.colores.find()
+    # Pasar la lista de colores a la plantilla
+    return render_template('agregarTrailer.html', colores=colores)
+
 
 
 # Ruta de ejemplo para probar la conexión

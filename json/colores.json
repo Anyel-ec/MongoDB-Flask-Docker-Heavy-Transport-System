@@ -1,0 +1,13 @@
+
+[
+    { "_id": 1, "nombre": "Rojo" },
+    { "_id": 2, "nombre": "Verde" },
+    { "_id": 3, "nombre": "Azul" },
+    { "_id": 4, "nombre": "Amarillo" },
+    { "_id": 5, "nombre": "Naranja" },
+    { "_id": 6, "nombre": "Morado" },
+    { "_id": 7, "nombre": "Rosa" },
+    { "_id": 8, "nombre": "Gris" },
+    { "_id": 9, "nombre": "Blanco" },
+    { "_id": 10, "nombre": "Negro"}
+]
