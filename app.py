@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, request
 from flask_pymongo import PyMongo
 from dotenv import load_dotenv
 import os
@@ -21,6 +21,27 @@ def index():
     # Renderizar la plantilla y pasar los datos a la misma
     return render_template('index.html', trailers=trailers)
 
+@app.route('/agregar_trailer', methods=['POST'])
+def agregar_trailer():
+    # Obtener datos del formulario
+    matricula = request.form.get('matricula')
+    ejes = int(request.form.get('ejes'))
+    marca = request.form.get('marca')
+    modelo = request.form.get('modelo')
+    color = request.form.get('color')
+    capacidad_carga = int(request.form.get('capacidadCarga'))
+
+    # Insertar en la colección "trailer"
+    mongo.db.trailer.insert_one({
+        "matricula": matricula,
+        "Ejes": ejes,
+        "marca": marca,
+        "modelo": modelo,
+        "color": color,
+        "capacidad_carga": capacidad_carga
+    })
+
+    return jsonify({"message": "Trailer agregado exitosamente"})
 
 # Ruta de ejemplo para probar la conexión
 @app.route('/test_mongo_connection')
