@@ -1,0 +1,9 @@
+{
+    "Conductor": {
+        "_id": 1,
+        "nombre": "Jhon Zambrano",
+        "genero_id": 1,
+        "cedula": "2300287146",
+        "trailer_id": 1
+      }
+}

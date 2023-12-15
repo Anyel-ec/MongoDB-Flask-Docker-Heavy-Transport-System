@@ -1,0 +1,43 @@
+{
+    "Cooperativa": {
+        "_id": 1,
+        "nombre": "Transporte cybertrans",
+        "provincia": 1, 
+        "ubicacion": "Av Quevedo Km5", 
+        "telefono": "02322222", 
+        "correo": "matrix@cybertrans.com"
+    },
+    "Trailer": {
+        "_id": 1,
+        "matricula": "XXX-YYYY",
+        "Ejes": 4,
+        "marca": "Toyota",
+        "modelo": "Danger Red",
+        "color": "Blanco", 
+        "capacidad_carga": 20
+    },
+    "propietario": {
+        "_id": 1, 
+        "nombre": "Angel Patino", 
+        "genero": "Masculino", 
+        "licencia": "Profesional"
+    }, 
+    "conductores":{
+        "_id": 1, 
+        "nombre": "Jhonz Zambrano", 
+        "genero": "Masculino",
+        "cedula": "2300287146"
+    },
+    "clientes": {
+        "_id": 1,
+        "nombre": "Angel Patino", 
+        "cedula": "2300287146",
+        "telefono": "02322222",
+        "correo": "matrix@cybertrans.com", 
+        "genero_id": 1
+    },
+    "provincias": {
+        "_id": 1, 
+        "nombre": "Santo Domingo"
+    }
+}

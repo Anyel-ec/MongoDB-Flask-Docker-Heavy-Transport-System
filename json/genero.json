@@ -1,0 +1,12 @@
+{
+    "generos": [
+        {
+            "_id": 1,
+            "nombre": "Masculino"
+        },
+        {
+            "_id": 2,
+            "nombre": "Femenino"
+        }
+    ]
+}

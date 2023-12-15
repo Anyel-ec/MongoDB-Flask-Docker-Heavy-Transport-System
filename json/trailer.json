@@ -1,0 +1,11 @@
+{
+    "Trailer": {
+        "_id": 1,
+        "matricula": "XXX-YYYY",
+        "Ejes": 4,
+        "marca": "Toyota",
+        "modelo": "Danger Red",
+        "color": "Blanco", 
+        "capacidad_carga": 20
+    }
+}

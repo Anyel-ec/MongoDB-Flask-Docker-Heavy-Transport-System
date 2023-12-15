@@ -1,0 +1,10 @@
+{
+    "Cooperativa": {
+        "_id": 1,
+        "nombre": "Transporte cybertrans",
+        "provincia": 1,
+        "ubicacion": "Av Quevedo Km5",
+        "telefono": "02322222",
+        "correo": "matrix@cybertrans.com"
+    }
+}

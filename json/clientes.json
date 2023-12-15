@@ -1,0 +1,30 @@
+{
+    "generos": [
+        {
+            "_id": 1,
+            "nombre": "Masculino"
+        },
+        {
+            "_id": 2,
+            "nombre": "Femenino"
+        }
+    ],
+    "clientes": [
+        {
+            "_id": 1,
+            "nombre": "Angel Patino",
+            "cedula": "2300287146",
+            "telefono": "02322222",
+            "correo": "matrix@cybertrans.com",
+            "genero_id": 1
+        },
+        {
+            "_id": 2,
+            "nombre": "Angel Patino",
+            "cedula": "2300287146",
+            "telefono": "02322222",
+            "correo": "matrix@cybertrans.com",
+            "genero_id": 1
+        }
+    ]
+}
