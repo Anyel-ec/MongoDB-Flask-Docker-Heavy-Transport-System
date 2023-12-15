@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dataTables.bootstrap5.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- CDN font awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css">
+    <title>{% block title %}Título por defecto{% endblock %}</title>
+</head>
+
+<body>
+    <!-- Aquí puedes agregar contenido común que se mostrará en todas las páginas -->
+
+    {% block content %}{% endblock %}
+
+    <!-- Aquí puedes agregar contenido común que se mostrará en todas las páginas -->
+
+</body>
+
+</html>

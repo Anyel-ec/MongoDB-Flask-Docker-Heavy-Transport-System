@@ -13,6 +13,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css">
     <title>Inicio</title>
+    <script src="{{ url_for('static', filename='js/sweetalert2@10.js') }}"></script>
 
 </head>
 
@@ -30,10 +31,12 @@
                     <div class="right"></div>
                 </div>
                 <li class="nav-item">
-                    <a class="nav-link active text-primary" href="javascript:void(0);"><i class="fas fa-tachometer-alt"></i>Dashboard</a>
+                    <a class="nav-link active text-primary" href="javascript:void(0);"><i
+                            class="fas fa-tachometer-alt"></i>Dashboard</a>
                 </li>
                 <li class="nav-item ">
-                    <a class="nav-link" href="javascript:void(0);" target="_blank"><i class="far fa-address-book"></i>Address
+                    <a class="nav-link  " href="javascript:void(0);" target="_blank"><i
+                            class="far fa-address-book"></i>Address
                         Book</a>
                 </li>
                 <li class="nav-item">
@@ -53,37 +56,41 @@
     </nav>
     <div class="container mt-5">
         <div class="row">
-            <div class="col-md-12">
-                <h1> Trailer</h1>
-                <a href="{{ url_for('formulario_agregar_trailer') }}" class="btn btn-primary">Add</a>
-                <table id="example" class="table table-striped table-bordered" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>Matricula</th>
-                            <th>Ejes</th>
-                            <th>Marca</th>
-                            <th>Modelo</th>
-                            <th>Color</th>
-                            <th>Capacidad de Carga</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for trailer in trailers %}
-                        <tr>
-                            <td>{{ trailer.matricula }}</td>
-                            <td>{{ trailer.Ejes }}</td>
-                            <td>{{ trailer.marca }}</td>
-                            <td>{{ trailer.modelo }}</td>
-                            <td>{{ trailer.color }}</td>
-                            <td>{{ trailer.capacidad_carga }}</td>
-                            <td> <button class="btn btn-success">Editar</button>
-                                <button class="btn btn-danger">Eliminar</button>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            <div class="col-12">
+                <form method="POST" action="{{ url_for('agregar_trailer') }}" id="trailerForm">
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="matricula" class="form-label">Matricula</label>
+                            <input type="text" class="form-control" id="matricula" name="matricula" required>
+                        </div>
+                        <div class="col-6">
+                            <label for="ejes" class="form-label">Ejes</label>
+                            <input type="number" class="form-control" id="ejes" name="ejes" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="marca" class="form-label">Marca</label>
+                            <input type="text" class="form-control" id="marca" name="marca" required>
+                        </div>
+                        <div class="col-6">
+                            <label for="modelo" class="form-label">Modelo</label>
+                            <input type="text" class="form-control" id="modelo" name="modelo" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="color" class="form-label">Color</label>
+                            <input type="text" class="form-control" id="color" name="color" required>
+                        </div>
+                        <div class="col-6">
+                            <label for="capacidadCarga" class="form-label">Capacidad de Carga</label>
+                            <input type="number" class="form-control" id="capacidadCarga" name="capacidadCarga"
+                                required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-5">Agregar Trailer</button>
+                </form>
             </div>
 
 
@@ -105,6 +112,29 @@
             </script>
 
             <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+            <script>
+                function agregarTrailer() {
+                    // Realiza la petición POST al servidor
+                    $.post({
+                        url: "{{ url_for('agregar_trailer') }}",  <!-- Cambiado de 'home' a 'agregar_trailer' -->
+                        data: $('#trailerForm').serialize(), // Envía los datos del formulario
+                        success: function (response) {
+                            // Muestra la alerta según la respuesta del servidor
+                            if (response.success) {
+                                Swal.fire('Éxito', response.message, 'success');
+                            } else {
+                                Swal.fire('Error', response.message, 'error');
+                            }
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    });
+                }
+            </script>
+            
+
 
             <!--script de bs5 -->
             <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>

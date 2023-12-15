@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template, request, redirect, url_for
 from flask_pymongo import PyMongo
 from dotenv import load_dotenv
 import os
@@ -17,31 +17,43 @@ mongo = PyMongo(app)
 def index():
     # Obtener los datos de la colección "trailer"
     trailers = mongo.db.trailer.find()
-
     # Renderizar la plantilla y pasar los datos a la misma
     return render_template('index.html', trailers=trailers)
 
 @app.route('/agregar_trailer', methods=['POST'])
 def agregar_trailer():
-    # Obtener datos del formulario
-    matricula = request.form.get('matricula')
-    ejes = int(request.form.get('ejes'))
-    marca = request.form.get('marca')
-    modelo = request.form.get('modelo')
-    color = request.form.get('color')
-    capacidad_carga = int(request.form.get('capacidadCarga'))
+    if request.method == 'POST':
+        # Obtener los datos del formulario
+        matricula = request.form.get('matricula')
+        ejes = int(request.form.get('ejes'))
+        marca = request.form.get('marca')
+        modelo = request.form.get('modelo')
+        color = request.form.get('color')
+        capacidad_carga = int(request.form.get('capacidadCarga'))
 
-    # Insertar en la colección "trailer"
-    mongo.db.trailer.insert_one({
-        "matricula": matricula,
-        "Ejes": ejes,
-        "marca": marca,
-        "modelo": modelo,
-        "color": color,
-        "capacidad_carga": capacidad_carga
-    })
+        # Crear un nuevo documento para MongoDB
+        nuevo_trailer = {
+            'matricula': matricula,
+            'ejes': ejes,
+            'marca': marca,
+            'modelo': modelo,
+            'color': color,
+            'capacidad_carga': capacidad_carga
+        }
 
-    return jsonify({"message": "Trailer agregado exitosamente"})
+        # Insertar el nuevo trailer en la colección "trailer"
+        mongo.db.trailer.insert_one(nuevo_trailer)
+
+        # Redirigir a la página principal después de agregar el trailer
+        return redirect(url_for('index'))
+    
+
+
+# Nueva ruta para renderizar la plantilla agregarTrailer.html
+@app.route('/formulario_agregar_trailer')
+def formulario_agregar_trailer():
+    return render_template('agregarTrailer.html')
+
 
 # Ruta de ejemplo para probar la conexión
 @app.route('/test_mongo_connection')
