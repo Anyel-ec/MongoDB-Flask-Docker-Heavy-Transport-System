@@ -1,42 +1,36 @@
-from flask import Flask, jsonify, request
-from config import get_mongo_connection, close_mongo_connection
+from flask import Flask, jsonify, render_template
+from flask_pymongo import PyMongo
+from dotenv import load_dotenv
+import os
+
+# Cargar variables de entorno desde el archivo .env
+load_dotenv()
 
 app = Flask(__name__)
 
-# Ruta para insertar datos en la colección 'persona'
-@app.route('/insertar_persona', methods=['POST'])
-def insertar_persona():
+# Configuración de la base de datos MongoDB desde la variable de entorno
+app.config['MONGO_URI'] = os.getenv('MONGO_URI')
+mongo = PyMongo(app)
+
+
+@app.route('/')
+def index():
+    # Obtener los datos de la colección "trailer"
+    trailers = mongo.db.trailer.find()
+
+    # Renderizar la plantilla y pasar los datos a la misma
+    return render_template('index.html', trailers=trailers)
+
+
+# Ruta de ejemplo para probar la conexión
+@app.route('/test_mongo_connection')
+def test_mongo_connection():
     try:
-        # Obtener la conexión a la base de datos
-        mongo_client, mongo_db = get_mongo_connection()
-
-        # Verificar si hay conexión
-        if mongo_client and mongo_db:
-            # Obtener la colección 'persona'
-            persona_collection = mongo_db.get_collection('persona')
-
-            # Obtener los datos del cuerpo de la solicitud POST
-            data = request.json
-
-            # Insertar los datos en la colección 'persona'
-            result = persona_collection.insert_one(data)
-
-            # Imprimir el ID del documento insertado
-            print(f"Documento insertado con ID: {result.inserted_id}")
-
-            return jsonify({'status': 'success', 'message': 'Datos insertados correctamente'})
-
-        else:
-            return jsonify({'status': 'error', 'message': 'No hay conexión a la base de datos'})
-
+        # Intenta realizar una consulta simple para verificar la conexión
+        result = mongo.db.test_collection.find_one()
+        return jsonify({'message': 'Conexión exitosa a MongoDB', 'data': result})
     except Exception as e:
-        return jsonify({'status': 'error', 'message': f'Error al insertar datos: {e}'})
-
-    finally:
-        # Cerrar la conexión después de realizar las operaciones necesarias
-        close_mongo_connection(mongo_client)
-
-# Puedes agregar más rutas y funcionalidades aquí
+        return jsonify({'message': 'Error en la conexión a MongoDB', 'error': str(e)})
 
 if __name__ == '__main__':
     app.run(debug=True)

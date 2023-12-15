@@ -1,11 +1,182 @@
-{
-    "Trailer": {
-        "_id": 1,
-        "matricula": "XXX-YYYY",
+[
+    {
+        "_id": 11,
+        "matricula": "ZZZ-1111",
+        "Ejes": 3,
+        "marca": "Ford",
+        "modelo": "Silver Lightning",
+        "color": "Gris",
+        "capacidad_carga": 18
+    },
+    {
+        "_id": 12,
+        "matricula": "ABC-9876",
+        "Ejes": 5,
+        "marca": "Chevrolet",
+        "modelo": "Thunder",
+        "color": "Negro",
+        "capacidad_carga": 22
+    },
+    {
+        "_id": 13,
+        "matricula": "XYZ-5432",
+        "Ejes": 4,
+        "marca": "Nissan",
+        "modelo": "Firestorm",
+        "color": "Rojo",
+        "capacidad_carga": 20
+    },
+    {
+        "_id": 14,
+        "matricula": "LMN-2468",
+        "Ejes": 6,
+        "marca": "Dodge",
+        "modelo": "Iceberg",
+        "color": "Azul",
+        "capacidad_carga": 25
+    },
+    {
+        "_id": 15,
+        "matricula": "JKL-1357",
         "Ejes": 4,
         "marca": "Toyota",
-        "modelo": "Danger Red",
-        "color": "Blanco", 
+        "modelo": "Tornado",
+        "color": "Verde",
+        "capacidad_carga": 21
+    },
+    {
+        "_id": 16,
+        "matricula": "OPQ-2468",
+        "Ejes": 3,
+        "marca": "GMC",
+        "modelo": "Blizzard",
+        "color": "Blanco",
+        "capacidad_carga": 19
+    },
+    {
+        "_id": 17,
+        "matricula": "DEF-9876",
+        "Ejes": 5,
+        "marca": "Honda",
+        "modelo": "Hurricane",
+        "color": "Amarillo",
+        "capacidad_carga": 23
+    },
+    {
+        "_id": 18,
+        "matricula": "MNO-5432",
+        "Ejes": 4,
+        "marca": "Jeep",
+        "modelo": "Typhoon",
+        "color": "Naranja",
         "capacidad_carga": 20
+    },
+    {
+        "_id": 19,
+        "matricula": "UVW-1111",
+        "Ejes": 3,
+        "marca": "Subaru",
+        "modelo": "Cyclone",
+        "color": "Morado",
+        "capacidad_carga": 18
+    },
+    {
+        "_id": 20,
+        "matricula": "RST-1357",
+        "Ejes": 4,
+        "marca": "Mercedes",
+        "modelo": "Avalanche",
+        "color": "Gris",
+        "capacidad_carga": 20
+    },
+    {
+        "_id": 21,
+        "matricula": "IJK-2468",
+        "Ejes": 6,
+        "marca": "Volkswagen",
+        "modelo": "Tempest",
+        "color": "Negro",
+        "capacidad_carga": 25
+    },
+    {
+        "_id": 22,
+        "matricula": "EFG-9876",
+        "Ejes": 4,
+        "marca": "Kia",
+        "modelo": "Sunstorm",
+        "color": "Rojo",
+        "capacidad_carga": 22
+    },
+    {
+        "_id": 23,
+        "matricula": "HIJ-5432",
+        "Ejes": 5,
+        "marca": "Hyundai",
+        "modelo": "Moonlight",
+        "color": "Azul",
+        "capacidad_carga": 23
+    },
+    {
+        "_id": 24,
+        "matricula": "ABC-1111",
+        "Ejes": 3,
+        "marca": "Mazda",
+        "modelo": "Stellar",
+        "color": "Verde",
+        "capacidad_carga": 19
+    },
+    {
+        "_id": 25,
+        "matricula": "XYZ-1357",
+        "Ejes": 4,
+        "marca": "Audi",
+        "modelo": "Thunderbolt",
+        "color": "Blanco",
+        "capacidad_carga": 21
+    },
+    {
+        "_id": 26,
+        "matricula": "JKL-2468",
+        "Ejes": 6,
+        "marca": "Lexus",
+        "modelo": "Aurora",
+        "color": "Amarillo",
+        "capacidad_carga": 24
+    },
+    {
+        "_id": 27,
+        "matricula": "OPQ-9876",
+        "Ejes": 5,
+        "marca": "Infiniti",
+        "modelo": "Storm",
+        "color": "Naranja",
+        "capacidad_carga": 22
+    },
+    {
+        "_id": 28,
+        "matricula": "DEF-5432",
+        "Ejes": 4,
+        "marca": "Porsche",
+        "modelo": "Cyclone",
+        "color": "Morado",
+        "capacidad_carga": 20
+    },
+    {
+        "_id": 29,
+        "matricula": "MNO-1111",
+        "Ejes": 3,
+        "marca": "Jaguar",
+        "modelo": "Blizzard",
+        "color": "Gris",
+        "capacidad_carga": 18
+    },
+    {
+        "_id": 30,
+        "matricula": "UVW-1357",
+        "Ejes": 4,
+        "marca": "Land Rover",
+        "modelo": "Typhoon",
+        "color": "Negro",
+        "capacidad_carga": 21
     }
-}
+]
