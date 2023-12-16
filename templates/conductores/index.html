@@ -35,10 +35,10 @@
                             class="far fa-address-book"></i>Clientes
                     </a>
                 </li>
-                <!-- <li class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link active text-primary" href="{{ url_for('index_conductores') }}"><i
                             class="far fa-clone"></i>Conductores</a>
-                </li> -->
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="javascript:void(0);"><i class="far fa-calendar-alt"></i>Calendar</a>
                 </li>
@@ -64,9 +64,9 @@
                 {% endfor %}
                 {% endif %}
                 {% endwith %}
-
-                <h1>Gestión de Conductores </h1>
-                <a href="{{ url_for('formulario_agregar_cliente') }}" class="btn btn-primary mb-5">Nuevo</a>
+    
+                <h1>Gestión de Conductores</h1>
+                <a href="{{ url_for('formulario_agregar_conductor') }}" class="btn btn-primary mb-5">Nuevo</a>
                 <table id="example" class="table table-striped table-bordered" style="width:100%">
                     <thead>
                         <tr>
@@ -81,18 +81,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for cliente in clientes %}
+                        {% for conductor in conductores %}
                         <tr>
-                            <td>{{ cliente['nombres'] }}</td>
-                            <td>{{ cliente['cedula'] }}</td>
-                            <td>{{ cliente['correo'] }}</td>
-                            <td>{{ cliente['direccion'] }}</td>
-                            <td>{{ cliente['provincia'] }}</td>
-                            <td>{{ cliente['genero'] }}</td>
+                            <td>{{ conductor['nombre'] }}</td>
+                            <td>{{ conductor['cedula'] }}</td>
+                            <td>{{ conductor['telefono'] }}</td>
+                            <td>{{ conductor['fecha_nacimiento'] }}</td>
+                            <td>{{ conductor['correo'] }}</td>
+                            <td>{{ conductor['genero'] }}</td>
+                            <td>{{ conductor['trailer_matricula'] }}</td>
                             <td>
-                                <a href="{{ url_for('editar_cliente', cliente_id=cliente['_id']) }}"
+                                <a href="{{ url_for('editar_conductor', conductor_id=conductor['_id']) }}"
                                     class="btn btn-success">Editar</a>
-                                <a href="{{ url_for('eliminar_cliente', cliente_id=cliente['_id']) }}"
+                                <a href="{{ url_for('eliminar_conductor', conductor_id=conductor['_id']) }}"
                                     class="btn btn-danger">Eliminar</a>
                             </td>
                         </tr>
@@ -102,11 +103,7 @@
             </div>
         </div>
     </div>
-
-
-
-
-
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>

@@ -9,8 +9,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <!-- CDN font awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css">
-    <title>Agregar Trailer</title>
-    <script src="{{ url_for('static', filename='js/sweetalert2@10.js') }}"></script>
+    <title>Actualizar Trailer</title>    
 
 </head>
 
@@ -32,12 +31,12 @@
                             class="fas fa-tachometer-alt"></i>Trailer</a>
                 </li>
                 <li class="nav-item ">
-                    <a class="nav-link active text-primary" href="javascript:void(0);" target="_blank"><i
+                    <a class="nav-link " href="javascript:void(0);" target="_blank"><i
                             class="far fa-address-book"></i>Clientes
                         </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="javascript:void(0);"><i class="far fa-clone"></i>Components</a>
+                    <a class="nav-link active text-primary" href="javascript:void(0);"><i class="far fa-clone"></i>Components</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="javascript:void(0);"><i class="far fa-calendar-alt"></i>Calendar</a>
@@ -54,63 +53,70 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col-12">
-                <h1 class="">Agregar Cliente</h1>
+                <h1 class="">Actualizar Conductor</h1>
                 <hr>
-                <form method="POST" action="{{ url_for('agregar_cliente') }}">
+                <form method="POST" action="{{ url_for('editar_conductor', conductor_id=conductor['_id']) }}">
                     <div class="row">
                         <div class="col-6">
-                            <label for="nombres" class="form-label">Nombres: </label>
-                            <input placeholder="Nombre Apellido" type="text" class="form-control" id="nombre" name="nombres" required>
+                            <label for="nombres" class="form-label">Nombres:</label>
+                            <input placeholder="Nombre Apellido" type="text" class="form-control" id="nombres" name="nombres" value="{{ conductor['nombre'] }}" required>
                         </div>
                         <div class="col-6">
-                            <label for="cedula" class="form-label">Cedula: </label>
-                            <input placeholder="23XXXXXXX0" type="text" class="form-control" id="cedula" name="cedula" required>
-                        </div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-6">
-                            <label for="correo" class="form-label">Correo: </label>
-                            <input placeholder="example@gmail.com" type="text" class="form-control" id="correo" name="correo" required>
-                        </div>
-                        <div class="col-6">
-                            <label for="direccion" class="form-label">Direccion</label>
-                            <input  placeholder="Calle 123" type="text" class="form-control" id="direccion" name="direccion" required>
+                            <label for="cedula" class="form-label">Cédula:</label>
+                            <input placeholder="23XXXXXXX0" type="text" class="form-control" id="cedula" name="cedula" value="{{ conductor['cedula'] }}" required>
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-6">
-                            <label for="provincia" class="form-label">Provincia:</label>
-                            <select class="form-select" name="provincia" id="provincia" required>
-                                <option value="" disabled selected>Escoge una opción</option>
-                                {% for provincia in provincias %}
-                                <option value="{{ provincia._id }}">{{ provincia.nombre }}</option>
-                                {% endfor %}
-                            </select>
+                            <label for="correo" class="form-label">Correo:</label>
+                            <input placeholder="example@gmail.com" type="text" class="form-control" id="correo" name="correo" value="{{ conductor['correo'] }}" required>
                         </div>
                         <div class="col-6">
-                            <label for="genero" class="form-label">Género: </label>
-                            <select class="form-select" name="genero" id="genero" required>
-                                <option value="" disabled selected>Escoge una opción</option>
+                            <label for="telefono" class="form-label">Teléfono:</label>
+                            <input placeholder="0999470232" type="text" class="form-control" id="telefono" name="telefono" value="{{ conductor['telefono'] }}" required>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-6">
+                            <label for="nacimiento" class="form-label">Fecha de Nacimiento:</label>
+                            <div class="input-group">
+                                <input type="date" class="form-control" name="nacimiento" id="nacimiento" value="{{ conductor['fecha_nacimiento'] }}">
+                            </div>
+                        </div>
+                        
+                        <div class="col-6">
+                            <label for="genero" class="form-label">Género:</label>
+                            <select class="form-select" name="genero" id="genero">
                                 {% for genero in genero %}
-                                <option value="{{ genero._id }}">{{ genero.nombre }}</option>
+                                    <option value="{{ genero._id }}" {% if genero._id == conductor['genero_id'] %}selected{% endif %}>{{ genero.nombre }}</option>
                                 {% endfor %}
                             </select>
                         </div>
+                        
                     </div>
-                    <div class="row mt-3 text-center">
+                    <div class="row mt-3">
+                        <div class="col-6">
+                            <label for="trailer" class="form-label">Trailer:</label>
+                            <select class="form-select" name="trailer" id="trailer">
+                                {% for trailer in trailer %}
+                                    <option value="{{ trailer._id }}" {% if trailer._id == conductor['trailer_id'] %}selected{% endif %}>{{ trailer.matricula }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                    </div>
+                    <div class="row mt-5">
                         <div class="col-md-12">
-                            <button type="submit" class="btn btn-primary btn-block">Agregar Cliente</button>
-                            <a href="{{ url_for('index_clientes') }}" class="btn btn-danger btn-block ">Volver al inicio</a>
-                        </div>
-                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-primary btn-block">Actualizar Conductor</button>
+                            <a href="{{ url_for('index_conductores') }}" class="btn btn-secondary btn-block">Volver al inicio</a>
                         </div>
                     </div>
-
-
                 </form>
             </div>
         </div>
     </div>
+    
+    
 
 
 
@@ -131,15 +137,6 @@
     </script>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-
-
-
-
-
-
-
-
-
     <!--script de bs5 -->
     <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>

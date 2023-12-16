@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <!-- CDN font awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css">
-    <title>Actualizar Trailer</title>    
+    <title>Agregar Conductor</title>
 
 </head>
 
@@ -53,58 +53,71 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col-12">
-                <h1 class="">Actualizar Cliente</h1>
+                <h1 class="">Agregar Conductores</h1>
                 <hr>
-                <form method="POST" action="{{ url_for('editar_cliente', cliente_id=cliente['_id']) }}">
+                <form method="POST" action="{{ url_for('agregar_conductor') }}">
                     <div class="row">
                         <div class="col-6">
-                            <label for="nombres" class="form-label">Nombres:</label>
-                            <input placeholder="Nombre Apellido" type="text" class="form-control" id="nombres" name="nombres" value="{{ cliente['nombres'] }}" required>
+                            <label for="nombres" class="form-label">Nombres: </label>
+                            <input placeholder="Nombre Apellido" type="text" class="form-control" id="nombre" name="nombres" required>
                         </div>
                         <div class="col-6">
-                            <label for="cedula" class="form-label">Cédula:</label>
-                            <input placeholder="23XXXXXXX0" type="text" class="form-control" id="cedula" name="cedula" value="{{ cliente['cedula'] }}" required>
-                        </div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-6">
-                            <label for="correo" class="form-label">Correo:</label>
-                            <input placeholder="example@gmail.com" type="text" class="form-control" id="correo" name="correo" value="{{ cliente['correo'] }}" required>
-                        </div>
-                        <div class="col-6">
-                            <label for="direccion" class="form-label">Dirección:</label>
-                            <input placeholder="Calle 123" type="text" class="form-control" id="direccion" name="direccion" value="{{ cliente['direccion'] }}" required>
+                            <label for="cedula" class="form-label">Cedula: </label>
+                            <input placeholder="23XXXXXXX0" type="text" class="form-control" id="cedula" name="cedula" required>
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-6">
-                            <label for="provincia" class="form-label">Provincia:</label>
-                            <select class="form-select" name="provincia" id="provincia">
-                                {% for provincia in provincias %}
-                                    <option value="{{ provincia._id }}" {% if provincia._id == cliente['provincia_id'] %}selected{% endif %}>{{ provincia.nombre }}</option>
-                                {% endfor %}
-                            </select>
+                            <label for="telefono" class="form-label">Telefono: </label>
+                            <input placeholder="0999470232" type="text" class="form-control" id="telefono" name="telefono" required>
                         </div>
                         <div class="col-6">
-                            <label for="genero" class="form-label">Género:</label>
-                            <select class="form-select" name="genero" id="genero">
+                            <label for="nacimiento" class="form-label">Fecha de Nacimiento</label>
+                            <input type="date" name="nacimiento" id="nacimiento" class="form-control">
+                        </div>                        
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <label for="correo" class="form-label">Correo: </label>
+                            <input placeholder="example@gmail.com" type="text" class="form-control" id="correo" name="correo" required>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-6">
+                            <label for="genero" class="form-label">Género: </label>
+                            <select class="form-select" name="genero" id="genero" required>
+                                <option value="" disabled selected>Escoge una opción</option>
                                 {% for genero in genero %}
-                                    <option value="{{ genero._id }}" {% if genero._id == cliente['genero_id'] %}selected{% endif %}>{{ genero.nombre }}</option>
+                                <option value="{{ genero._id }}">{{ genero.nombre }}</option>
                                 {% endfor %}
                             </select>
                         </div>
+                        <div class="col-6">
+                            <label for="trailer" class="form-label">Trailer:</label>
+                            <select class="form-select" name="trailer" id="trailer" required>
+                                <option value="" disabled selected>Escoge una opción</option>
+                                {% for trailer in trailer %}
+                                <option value="{{ trailer._id }}">{{ trailer.matricula }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
                     </div>
-                    <div class="row mt-5">
+                    
+                    <div class="row mt-3 text-center">
                         <div class="col-md-12">
-                            <button type="submit" class="btn btn-primary btn-block">Actualizar Cliente</button>
-                            <a href="{{ url_for('index_clientes') }}" class="btn btn-secondary btn-block">Volver al inicio</a>
+                            <button type="submit" class="btn btn-primary btn-block">Agregar Cliente</button>
+                            <a href="{{ url_for('index_clientes') }}" class="btn btn-danger btn-block ">Volver al inicio</a>
+                        </div>
+                        <div class="col-md-6">
                         </div>
                     </div>
+
+
                 </form>
             </div>
         </div>
     </div>
-    
 
 
 
@@ -125,6 +138,15 @@
     </script>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+
+
+
+
+
+
+
+
     <!--script de bs5 -->
     <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>

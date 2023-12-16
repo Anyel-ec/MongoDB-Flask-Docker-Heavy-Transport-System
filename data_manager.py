@@ -70,7 +70,7 @@ class DataManager:
             self.mongo.db.trailer.delete_one({'_id': ObjectId(trailer_id)})
 
         return trailer, marca, color
-
+#########################################################################################################################
     # CLIENTES
     def get_clientes(self):
         clientes = self.mongo.db.clientes.find()
@@ -98,8 +98,6 @@ class DataManager:
             clientes_con_datos.append(cliente_con_datos)
 
         return clientes_con_datos
-
-    # En data_manager.py
 
     def add_cliente(self, nombres, cedula, correo, direccion, provincia_id, genero_id):
         nuevo_cliente = {
@@ -143,3 +141,79 @@ class DataManager:
             self.mongo.db.clientes.delete_one({'_id': ObjectId(cliente_id)})
 
         return cliente, provincia, genero
+#########################################################################################################################
+    # CONDUCTORES
+    def get_conductores(self):
+        conductores = self.mongo.db.conductores.find()
+        generos = {genero['_id']: genero['nombre']
+                for genero in self.mongo.db.genero.find()}
+        trailers = {trailer['_id']: trailer['matricula']
+                    for trailer in self.mongo.db.trailer.find()}
+        conductores_con_info = []
+
+        for conductor in conductores:
+            genero_id = conductor.get('genero_id')
+            genero_nombre = generos.get(genero_id, 'Género Desconocido')
+            trailer_id = conductor.get('trailer_id')
+            trailer_matricula = trailers.get(trailer_id, 'Trailer Desconocido')
+
+            conductor_con_info = {
+                '_id': str(conductor['_id']),
+                'nombre': conductor['nombre'],
+                'telefono': conductor['telefono'],
+                'fecha_nacimiento': conductor['fecha_nacimiento'],
+                'correo': conductor['correo'],
+                'genero': genero_nombre,
+                'cedula': conductor['cedula'],
+                'trailer_matricula': trailer_matricula
+            }
+
+            conductores_con_info.append(conductor_con_info)
+
+        return conductores_con_info
+
+    def add_conductor(self, nombres, cedula, telefono, fecha_nacimiento, correo, genero_id, trailer_id):
+        nuevo_conductor = {
+            'nombre': nombres,
+            'cedula': cedula,
+            'telefono': telefono,
+            'fecha_nacimiento': fecha_nacimiento,
+            'correo': correo,
+            'genero_id': genero_id,
+            'trailer_id': ObjectId(trailer_id)
+        }
+        self.mongo.db.conductores.insert_one(nuevo_conductor)
+
+    def edit_conductor_by_id(self, conductor_id, nuevo_nombres, nueva_cedula, nuevo_telefono, nueva_fecha_nacimiento, nuevo_correo, nuevo_genero_id, nuevo_trailer_id):
+        self.mongo.db.conductores.update_one(
+            {'_id': ObjectId(conductor_id)},
+            {'$set': {
+                'nombre': nuevo_nombres,
+                'cedula': nueva_cedula,
+                'telefono': nuevo_telefono,
+                'fecha_nacimiento': nueva_fecha_nacimiento,
+                'correo': nuevo_correo,
+                'genero_id': nuevo_genero_id,
+                'trailer_id': ObjectId(nuevo_trailer_id)
+            }}
+        )
+        
+    def delete_conductor(self, conductor_id):
+        conductor = self.mongo.db.conductores.find_one(
+            {'_id': ObjectId(conductor_id)})
+
+        if conductor:
+            genero = self.mongo.db.generos.find_one(
+                {'_id': conductor['genero_id']})
+            trailer = self.mongo.db.trailer.find_one(
+                {'_id': conductor['trailer_id']})
+        else:
+            genero = None
+            trailer = None
+
+        if conductor:
+            self.mongo.db.conductores.delete_one({'_id': ObjectId(conductor_id)})
+
+        return conductor, genero, trailer
+    
+#########################################################################################################################
