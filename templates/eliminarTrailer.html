@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <!-- CDN font awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css">
-    <title>Agregar Trailer</title>
+    <title>Eliminar Trailer</title>
     <script src="{{ url_for('static', filename='js/sweetalert2@10.js') }}"></script>
 
 </head>
@@ -54,69 +54,40 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col-12">
-                <form method="POST" action="{{ url_for('agregar_trailer') }}">
-                    <div class="row">
-                        <div class="col-6">
-                            <label for="matricula" class="form-label">Matricula</label>
-                            <input placeholder="ABC-1234" type="text" class="form-control" id="matricula" name="matricula" required>
-                        </div>
-                        <div class="col-6">
-                            <label for="ejes" class="form-label">Ejes</label>
-                            <select class="form-select" id="ejes" name="Ejes" required>
-                                <option value="1">1 Eje</option>
-                                <option value="2">2 Ejes</option>
-                                <option value="3">3 Ejes</option>
-                                <option value="4">4 Ejes</option>
-                                <option value="5">5 Ejes</option>
-                                <option value="6">6 Ejes</option>
-                            </select>
-                        </div>
-                        
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-6">
-                            <label for="marca" class="form-label">Color:</label>
-                            <select class="form-select" name="marca" id="marca">
-                                {% for marca in marcas %}
-                                <option value="{{ marca._id }}">{{ marca.nombre }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-6">
-                            <label for="modelo" class="form-label">Modelo</label>
-                            <input type="text" class="form-control" id="modelo" name="modelo" required>
-                        </div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-6">
-                            <label for="color" class="form-label">Color:</label>
-                            <select class="form-select" name="color" id="color">
-                                {% for color in colores %}
-                                <option value="{{ color._id }}">{{ color.nombre }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-6">
-                            <label for="capacidadCarga" class="form-label">Capacidad de Carga</label>
-                            <input  placeholder="Capacidad de carga en Toneladas"
-                            type="number" class="form-control" id="capacidadCarga" name="capacidadCarga"
-                                required>
-                        </div>
-                    </div>
-                    <div class="row mt-3 text-center">
-                        <div class="col-md-12">
-                            <button type="submit" class="btn btn-primary btn-block">Agregar Trailer</button>
-                            <a href="{{ url_for('index') }}" class="btn btn-danger btn-block ">Volver al inicio</a>
-                        </div>
-                        <div class="col-md-6">
-                        </div>
-                    </div>
+                <h3>¿Está seguro que desea borrar este trailer?</h3>
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th>Matrícula</th>
+                            <td>{{ trailer['matricula'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Ejes</th>
+                            <td>{{ trailer['Ejes'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Marca</th>
+                            <td>{{ marca['nombre'] if marca else 'Desconocida' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Color</th>
+                            <td>{{ color['nombre'] if color else 'Desconocido' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Capacidad de Carga</th>
+                            <td>{{ trailer['capacidad_carga'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
 
-
+                <form method="POST">
+                    <button type="submit" class="btn btn-danger">Sí, Borrar</button>
+                    <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancelar</a>
                 </form>
             </div>
         </div>
     </div>
+
 
 
 

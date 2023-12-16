@@ -9,8 +9,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <!-- CDN font awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css">
-    <title>Agregar Trailer</title>
-    <script src="{{ url_for('static', filename='js/sweetalert2@10.js') }}"></script>
+    <title>Actualizar Trailer</title>    
 
 </head>
 
@@ -54,37 +53,36 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col-12">
-                <form method="POST" action="{{ url_for('agregar_trailer') }}">
+                <form method="POST" action="{{ url_for('editar_trailer', matricula=trailer['matricula']) }}">
                     <div class="row">
                         <div class="col-6">
                             <label for="matricula" class="form-label">Matricula</label>
-                            <input placeholder="ABC-1234" type="text" class="form-control" id="matricula" name="matricula" required>
+                            <input placeholder="ABC-1234" type="text" class="form-control" id="matricula" name="matricula" value="{{ trailer['matricula'] }}">
                         </div>
                         <div class="col-6">
                             <label for="ejes" class="form-label">Ejes</label>
                             <select class="form-select" id="ejes" name="Ejes" required>
-                                <option value="1">1 Eje</option>
-                                <option value="2">2 Ejes</option>
-                                <option value="3">3 Ejes</option>
-                                <option value="4">4 Ejes</option>
-                                <option value="5">5 Ejes</option>
-                                <option value="6">6 Ejes</option>
+                                <option value="1" {% if trailer['Ejes'] == 1 %}selected{% endif %}>1 Eje</option>
+                                <option value="2" {% if trailer['Ejes'] == 2 %}selected{% endif %}>2 Ejes</option>
+                                <option value="3" {% if trailer['Ejes'] == 3 %}selected{% endif %}>3 Ejes</option>
+                                <option value="4" {% if trailer['Ejes'] == 4 %}selected{% endif %}>4 Ejes</option>
+                                <option value="5" {% if trailer['Ejes'] == 5 %}selected{% endif %}>5 Ejes</option>
+                                <option value="6" {% if trailer['Ejes'] == 6 %}selected{% endif %}>6 Ejes</option>
                             </select>
                         </div>
-                        
                     </div>
                     <div class="row mt-3">
                         <div class="col-6">
-                            <label for="marca" class="form-label">Color:</label>
+                            <label for="marca" class="form-label">Marca:</label>
                             <select class="form-select" name="marca" id="marca">
                                 {% for marca in marcas %}
-                                <option value="{{ marca._id }}">{{ marca.nombre }}</option>
+                                    <option value="{{ marca._id }}" {% if marca._id == trailer['marca_id'] %}selected{% endif %}>{{ marca.nombre }}</option>
                                 {% endfor %}
                             </select>
                         </div>
                         <div class="col-6">
                             <label for="modelo" class="form-label">Modelo</label>
-                            <input type="text" class="form-control" id="modelo" name="modelo" required>
+                            <input type="text" class="form-control" id="modelo" name="modelo" value="{{ trailer['modelo'] }}" required>
                         </div>
                     </div>
                     <div class="row mt-3">
@@ -92,28 +90,23 @@
                             <label for="color" class="form-label">Color:</label>
                             <select class="form-select" name="color" id="color">
                                 {% for color in colores %}
-                                <option value="{{ color._id }}">{{ color.nombre }}</option>
+                                    <option value="{{ color._id }}" {% if color._id == trailer['color_id'] %}selected{% endif %}>{{ color.nombre }}</option>
                                 {% endfor %}
                             </select>
                         </div>
                         <div class="col-6">
                             <label for="capacidadCarga" class="form-label">Capacidad de Carga</label>
-                            <input  placeholder="Capacidad de carga en Toneladas"
-                            type="number" class="form-control" id="capacidadCarga" name="capacidadCarga"
-                                required>
+                            <input placeholder="Capacidad de carga en Toneladas" type="number" class="form-control" id="capacidadCarga" name="capacidadCarga" value="{{ trailer['capacidad_carga'] }}" required>
                         </div>
                     </div>
                     <div class="row mt-3 text-center">
                         <div class="col-md-12">
-                            <button type="submit" class="btn btn-primary btn-block">Agregar Trailer</button>
-                            <a href="{{ url_for('index') }}" class="btn btn-danger btn-block ">Volver al inicio</a>
-                        </div>
-                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-primary btn-block">Actualizar Trailer</button>
+                            <a href="{{ url_for('index') }}" class="btn btn-danger btn-block">Volver al inicio</a>
                         </div>
                     </div>
-
-
                 </form>
+                
             </div>
         </div>
     </div>
@@ -137,15 +130,6 @@
     </script>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-
-
-
-
-
-
-
-
-
     <!--script de bs5 -->
     <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>

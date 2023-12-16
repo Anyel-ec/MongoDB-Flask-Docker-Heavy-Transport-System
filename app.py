@@ -3,87 +3,84 @@ from flask_pymongo import PyMongo
 from dotenv import load_dotenv
 import os
 from bson import ObjectId
+from data_manager import DataManager
 
-
-# Cargar variables de entorno desde el archivo .env
+#Cargar variables de entorno desde el archivo .env
 load_dotenv()
 
 app = Flask(__name__)
+
+# Cargar variables de entorno desde el archivo .env
+
 app.secret_key = os.getenv('SECRET_KEY')
 
 # Configuración de la base de datos MongoDB desde la variable de entorno
 app.config['MONGO_URI'] = os.getenv('MONGO_URI')
 mongo = PyMongo(app)
 
+data_manager = DataManager(mongo)
 
 
 @app.route('/')
 def index():
-    # Obtener los datos de la colección "trailer"
-    trailers = mongo.db.trailer.find()
-
-    # Obtener los datos de la colección "colores"
-    colores = {color['_id']: color['nombre'] for color in mongo.db.colores.find()}
-
-    # Combinar los datos de las dos colecciones
-    trailers_con_colores = []
-    for trailer in trailers:
-        color_id = trailer.get('color_id')
-        color_nombre = colores.get(color_id, 'Color Desconocido')
-        trailer_con_color = {
-            'matricula': trailer['matricula'],
-            'Ejes': trailer['Ejes'],
-            'marca': trailer['marca'],
-            'modelo': trailer['modelo'],
-            'color': color_nombre,
-            'capacidad_carga': trailer['capacidad_carga']
-        }
-        trailers_con_colores.append(trailer_con_color)
-
-    # Renderizar la plantilla y pasar los datos a la misma
+    trailers_con_colores = data_manager.get_trailers_with_colors()
     return render_template('index.html', trailers=trailers_con_colores)
-
-
 
 
 @app.route('/agregar_trailer', methods=['POST'])
 def agregar_trailer():
     if request.method == 'POST':
-        # Obtener los datos del formulario
         matricula = request.form.get('matricula')
         Ejes = int(request.form.get('Ejes'))
-        marca = request.form.get('marca')
+        marca_id = int(request.form.get('marca'))
         modelo = request.form.get('modelo')
-        color_id = int(request.form.get('color'))  # Obtener el ID del color como entero
+        color_id = int(request.form.get('color'))
         capacidad_carga = int(request.form.get('capacidadCarga'))
 
-        # Crear un nuevo documento para MongoDB con la referencia al color
-        nuevo_trailer = {
-            'matricula': matricula,
-            'Ejes': Ejes,
-            'marca': marca,
-            'modelo': modelo,
-            'color_id': color_id,
-            'capacidad_carga': capacidad_carga
-        }
+        data_manager.add_trailer(matricula, Ejes, marca_id, modelo, color_id, capacidad_carga)
 
-        # Insertar el nuevo trailer en la colección "trailer"
-        mongo.db.trailer.insert_one(nuevo_trailer)
         flash('Trailer agregado correctamente', 'success')
-        # Redirigir a la página principal después de agregar el trailer
         return redirect(url_for('index'))
 
-   
+@app.route('/editar_trailer/<string:matricula>', methods=['GET', 'POST'])
+def editar_trailer(matricula):
+    trailer = mongo.db.trailer.find_one({'matricula': matricula})
 
+    if request.method == 'POST':
+        nuevo_modelo = request.form.get('modelo')
+        nuevo_color_id = int(request.form.get('color'))
+        nueva_capacidad_carga = int(request.form.get('capacidadCarga'))
+
+        data_manager.edit_trailer(matricula, nuevo_modelo, nuevo_color_id, nueva_capacidad_carga)
+
+        flash('Trailer actualizado correctamente', 'success')
+        return redirect(url_for('index'))
+
+    colores = mongo.db.colores.find()
+    marcas = mongo.db.marcas.find()
+
+    return render_template('actualizarTrailer.html', trailer=trailer, colores=colores, marcas=marcas)
+
+
+@app.route('/eliminar_trailer/<string:matricula>', methods=['GET', 'POST'])
+def eliminar_trailer(matricula):
+    trailer, marca, color = data_manager.delete_trailer(matricula)
+
+    if request.method == 'POST':
+        flash('Trailer eliminado correctamente', 'danger')
+        return redirect(url_for('index'))
+
+    return render_template('eliminarTrailer.html', trailer=trailer, marca=marca, color=color)
 
 # Nueva ruta para renderizar la plantilla agregarTrailer.html
 @app.route('/formulario_agregar_trailer')
 def formulario_agregar_trailer():
     # Obtener los colores desde la colección "colores"
     colores = mongo.db.colores.find()
-    # Pasar la lista de colores a la plantilla
-    return render_template('agregarTrailer.html', colores=colores)
+    marcas = mongo.db.marcas.find()
 
+    # Pasar la lista de colores a la plantilla
+    return render_template('agregarTrailer.html', colores=colores, marcas=marcas)
 
 
 # Ruta de ejemplo para probar la conexión
@@ -97,5 +94,6 @@ def test_mongo_connection():
         return jsonify({'message': 'Error en la conexión a MongoDB', 'error': str(e)})
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(host='0.0.0.0', port=5000, debug=True)
+
 

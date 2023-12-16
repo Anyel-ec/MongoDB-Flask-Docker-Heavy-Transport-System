@@ -4,18 +4,17 @@ FROM python:3.8
 # Establece el directorio de trabajo en /app
 WORKDIR /app
 
-# Copia el archivo requirements.txt al contenedor
+# Copia el archivo de requisitos al contenedor
 COPY requirements.txt .
 
 # Instala las dependencias
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copia el contenido actual del directorio al contenedor en /app
+# Copia el contenido del directorio actual al directorio /app en el contenedor
 COPY . .
 
-# Expone el puerto 5000 para la aplicación Flask
+# Expone el puerto 5000
 EXPOSE 5000
 
-# Comando por defecto para ejecutar la aplicación Flask
+# Comando para ejecutar la aplicación cuando se inicie el contenedor
 CMD ["python", "app.py"]
