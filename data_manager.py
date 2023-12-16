@@ -41,13 +41,15 @@ class DataManager:
 
         self.mongo.db.trailer.insert_one(nuevo_trailer)
     
-    def edit_trailer(self, matricula, nuevo_modelo, nuevo_color_id, nueva_capacidad_carga):
+    def edit_trailer(self, matricula, nuevo_modelo, nuevo_color_id, nueva_capacidad_carga, nuevo_marca_id, nuevo_ejes_id):
         self.mongo.db.trailer.update_one(
             {'matricula': matricula},
             {'$set': {
                 'modelo': nuevo_modelo,
                 'color_id': nuevo_color_id,
-                'capacidad_carga': nueva_capacidad_carga
+                'capacidad_carga': nueva_capacidad_carga,
+                'marca_id': nuevo_marca_id,
+                'Ejes': nuevo_ejes_id
             }}
         )
         

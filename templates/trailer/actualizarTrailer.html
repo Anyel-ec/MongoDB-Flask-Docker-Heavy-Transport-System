@@ -53,7 +53,7 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col-12">
-                <h1 class="text-center">Actualizar Trailer</h1>
+                <h1 class="">Actualizar Trailer</h1>
                 <hr>
                 <form method="POST" action="{{ url_for('editar_trailer', matricula=trailer['matricula']) }}">
                     <div class="row">
@@ -101,10 +101,10 @@
                             <input placeholder="Capacidad de carga en Toneladas" type="number" class="form-control" id="capacidadCarga" name="capacidadCarga" value="{{ trailer['capacidad_carga'] }}" required>
                         </div>
                     </div>
-                    <div class="row mt-3 text-center">
+                    <div class="row mt-5">
                         <div class="col-md-12">
                             <button type="submit" class="btn btn-primary btn-block">Actualizar Trailer</button>
-                            <a href="{{ url_for('index') }}" class="btn btn-danger btn-block">Volver al inicio</a>
+                            <a href="{{ url_for('index') }}" class="btn btn-secondary btn-block">Volver al inicio</a>
                         </div>
                     </div>
                 </form>

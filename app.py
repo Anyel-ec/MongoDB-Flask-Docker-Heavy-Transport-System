@@ -24,7 +24,7 @@ data_manager = DataManager(mongo)
 @app.route('/')
 def index():
     trailers_con_colores = data_manager.get_trailers_with_colors()
-    return render_template('index.html', trailers=trailers_con_colores)
+    return render_template('trailer/index.html', trailers=trailers_con_colores)
 
 
 @app.route('/agregar_trailer', methods=['POST'])
@@ -50,27 +50,27 @@ def editar_trailer(matricula):
         nuevo_modelo = request.form.get('modelo')
         nuevo_color_id = int(request.form.get('color'))
         nueva_capacidad_carga = int(request.form.get('capacidadCarga'))
-
-        data_manager.edit_trailer(matricula, nuevo_modelo, nuevo_color_id, nueva_capacidad_carga)
-
+        nuevo_marca_id = int(request.form.get('marca'))
+        nuevo_ejes_id = int(request.form.get('Ejes'))
+        data_manager.edit_trailer(matricula, nuevo_modelo, nuevo_color_id, nueva_capacidad_carga, nuevo_marca_id, nuevo_ejes_id)
         flash('Trailer actualizado correctamente', 'success')
         return redirect(url_for('index'))
 
     colores = mongo.db.colores.find()
     marcas = mongo.db.marcas.find()
 
-    return render_template('actualizarTrailer.html', trailer=trailer, colores=colores, marcas=marcas)
+    return render_template('trailer/actualizarTrailer.html', trailer=trailer, colores=colores, marcas=marcas)
 
 
 @app.route('/eliminar_trailer/<string:matricula>', methods=['GET', 'POST'])
 def eliminar_trailer(matricula):
-    trailer, marca, color = data_manager.delete_trailer(matricula)
-
-    if request.method == 'POST':
+    trailer = mongo.db.trailer.find_one({'matricula': matricula})
+    if request.method == 'POST' and 'confirm_delete' in request.form:
+        trailer, marca, color = data_manager.delete_trailer(matricula)
         flash('Trailer eliminado correctamente', 'danger')
         return redirect(url_for('index'))
 
-    return render_template('eliminarTrailer.html', trailer=trailer, marca=marca, color=color)
+    return render_template('trailer/eliminarTrailer.html', trailer=trailer, marca=marca, color=color)
 
 # Nueva ruta para renderizar la plantilla agregarTrailer.html
 @app.route('/formulario_agregar_trailer')
@@ -80,7 +80,7 @@ def formulario_agregar_trailer():
     marcas = mongo.db.marcas.find()
 
     # Pasar la lista de colores a la plantilla
-    return render_template('agregarTrailer.html', colores=colores, marcas=marcas)
+    return render_template('trailer/agregarTrailer.html', colores=colores, marcas=marcas)
 
 
 # Ruta de ejemplo para probar la conexión
@@ -94,6 +94,6 @@ def test_mongo_connection():
         return jsonify({'message': 'Error en la conexión a MongoDB', 'error': str(e)})
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(port=5000, debug=True)
 
 
