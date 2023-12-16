@@ -51,17 +51,19 @@ def agregar_trailer():
         flash('Trailer agregado correctamente', 'success')
         return redirect(url_for('index'))
 
-@app.route('/editar_trailer/<string:matricula>', methods=['GET', 'POST'])
-def editar_trailer(matricula):
-    trailer = mongo.db.trailer.find_one({'matricula': matricula})
+# En app.py
+@app.route('/editar_trailer/<string:trailer_id>', methods=['GET', 'POST'])
+def editar_trailer(trailer_id):
+    trailer = mongo.db.trailer.find_one({'_id': ObjectId(trailer_id)})
 
     if request.method == 'POST':
+        nueva_matricula = request.form.get('matricula')
         nuevo_modelo = request.form.get('modelo')
         nuevo_color_id = int(request.form.get('color'))
         nueva_capacidad_carga = int(request.form.get('capacidadCarga'))
         nuevo_marca_id = int(request.form.get('marca'))
         nuevo_ejes_id = int(request.form.get('Ejes'))
-        data_manager.edit_trailer(matricula, nuevo_modelo, nuevo_color_id, nueva_capacidad_carga, nuevo_marca_id, nuevo_ejes_id)
+        data_manager.edit_trailer_by_id(trailer_id, nueva_matricula, nuevo_modelo, nuevo_color_id, nueva_capacidad_carga, nuevo_marca_id, nuevo_ejes_id)
         flash('Trailer actualizado correctamente', 'success')
         return redirect(url_for('index'))
 
@@ -71,11 +73,13 @@ def editar_trailer(matricula):
     return render_template('trailer/actualizarTrailer.html', trailer=trailer, colores=colores, marcas=marcas)
 
 
-@app.route('/eliminar_trailer/<string:matricula>', methods=['GET', 'POST'])
-def eliminar_trailer(matricula):
+
+@app.route('/eliminar_trailer/<string:trailer_id>', methods=['GET', 'POST'])
+def eliminar_trailer(trailer_id):
+
     marcas = mongo.db.marcas.find()
     colores = mongo.db.colores.find()
-    trailer = mongo.db.trailer.find_one({'matricula': matricula})
+    trailer = mongo.db.trailer.find_one({'_id': ObjectId(trailer_id)})
     
     # Obtener información de la marca y el color utilizando sus IDs en el trailer
     marca_id = trailer.get('marca_id')
@@ -86,11 +90,10 @@ def eliminar_trailer(matricula):
     
     if request.method == 'POST' and 'confirm_delete' in request.form:
         # Eliminar el trailer
-        data_manager.delete_trailer(matricula)
+        data_manager.delete_trailer(trailer_id)
         flash('Trailer eliminado correctamente', 'success')
         return redirect(url_for('index'))
-        
-    return render_template('trailer/eliminarTrailer.html', trailer=trailer, marca=marca, color=color, marcas=marcas, colores=colores)
+    return render_template('trailer/eliminarTrailer.html', trailer=trailer, marca=marca, color=color, marcas=marcas, colores=colores, url_for=url_for)
 
 
 # Ruta de ejemplo para probar la conexión
@@ -105,5 +108,4 @@ def test_mongo_connection():
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
-
 

@@ -1,6 +1,5 @@
-# data_manager.py
 from flask_pymongo import PyMongo
-
+from bson import ObjectId
 class DataManager:
     def __init__(self, mongo):
         self.mongo = mongo
@@ -17,6 +16,7 @@ class DataManager:
             marca_id = trailer.get('marca_id')
             marca_nombre = marcas.get(marca_id, 'Marca Desconocida')
             trailer_con_color = {
+                '_id': str(trailer['_id']), 
                 'matricula': trailer['matricula'],
                 'Ejes': trailer['Ejes'],
                 'marca': marca_nombre,
@@ -27,7 +27,6 @@ class DataManager:
             trailers_con_colores.append(trailer_con_color)
 
         return trailers_con_colores
-    
 
     def add_trailer(self, matricula, Ejes, marca_id, modelo, color_id, capacidad_carga):
         nuevo_trailer = {
@@ -41,10 +40,11 @@ class DataManager:
 
         self.mongo.db.trailer.insert_one(nuevo_trailer)
     
-    def edit_trailer(self, matricula, nuevo_modelo, nuevo_color_id, nueva_capacidad_carga, nuevo_marca_id, nuevo_ejes_id):
+    def edit_trailer_by_id(self, trailer_id, nueva_matricula, nuevo_modelo, nuevo_color_id, nueva_capacidad_carga, nuevo_marca_id, nuevo_ejes_id):
         self.mongo.db.trailer.update_one(
-            {'matricula': matricula},
+            {'_id': ObjectId(trailer_id)},
             {'$set': {
+                'matricula': nueva_matricula,
                 'modelo': nuevo_modelo,
                 'color_id': nuevo_color_id,
                 'capacidad_carga': nueva_capacidad_carga,
@@ -52,9 +52,9 @@ class DataManager:
                 'Ejes': nuevo_ejes_id
             }}
         )
-        
-    def delete_trailer(self, matricula):
-        trailer = self.mongo.db.trailer.find_one({'matricula': matricula})
+
+    def delete_trailer(self, trailer_id):
+        trailer = self.mongo.db.trailer.find_one({'_id': ObjectId(trailer_id)})
 
         if trailer:
             marca = self.mongo.db.marcas.find_one({'_id': trailer['marca_id']})
@@ -64,6 +64,8 @@ class DataManager:
             color = None
 
         if trailer:
-            self.mongo.db.trailer.delete_one({'matricula': matricula})
+            self.mongo.db.trailer.delete_one({'_id': ObjectId(trailer_id)})
 
         return trailer, marca, color
+
+    
