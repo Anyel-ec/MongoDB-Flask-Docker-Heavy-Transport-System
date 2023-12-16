@@ -4,173 +4,67 @@ from dotenv import load_dotenv
 import os
 from bson import ObjectId
 from data_manager import DataManager
-
+from trailer_manager import trailer_inicio, trailer_form, add_trailer, update_trailer, delete_trailer
+from clientes_manager import clientes_home, cliente_form, add_cliente, update_cliente, delete_cliente
 #Cargar variables de entorno desde el archivo .env
 load_dotenv()
 
 app = Flask(__name__)
 
 # Cargar variables de entorno desde el archivo .env
-
 app.secret_key = os.getenv('SECRET_KEY')
-
-# Configuración de la base de datos MongoDB desde la variable de entorno
 app.config['MONGO_URI'] = os.getenv('MONGO_URI')
-mongo = PyMongo(app)
 
+mongo = PyMongo(app)
 data_manager = DataManager(mongo)
 
 
+# Rutas del Trailer 
 @app.route('/')
 def index():
-    trailers = data_manager.get_trailers()
-    return render_template('trailer/index.html', trailers=trailers)
+    return trailer_inicio(data_manager)
 
-# Nueva ruta para renderizar la plantilla agregarTrailer.html
 @app.route('/formulario_agregar_trailer')
 def formulario_agregar_trailer():
-    # Obtener los colores desde la colección "colores"
-    colores = mongo.db.colores.find()
-    marcas = mongo.db.marcas.find()
-
-    # Pasar la lista de colores a la plantilla
-    return render_template('trailer/agregarTrailer.html', colores=colores, marcas=marcas)
+    return trailer_form(mongo)
 
 @app.route('/agregar_trailer', methods=['POST'])
 def agregar_trailer():
-    if request.method == 'POST':
-        matricula = request.form.get('matricula')
-        Ejes = int(request.form.get('Ejes'))
-        marca_id = int(request.form.get('marca'))
-        modelo = request.form.get('modelo')
-        color_id = int(request.form.get('color'))
-        capacidad_carga = int(request.form.get('capacidadCarga'))
+    return add_trailer(request, data_manager)
 
-        data_manager.add_trailer(matricula, Ejes, marca_id, modelo, color_id, capacidad_carga)
-
-        flash('Trailer agregado correctamente', 'success')
-        return redirect(url_for('index'))
-
-# Editar cliente
 @app.route('/editar_trailer/<string:trailer_id>', methods=['GET', 'POST'])
 def editar_trailer(trailer_id):
-    trailer = mongo.db.trailer.find_one({'_id': ObjectId(trailer_id)})
-
-    if request.method == 'POST':
-        nueva_matricula = request.form.get('matricula')
-        nuevo_modelo = request.form.get('modelo')
-        nuevo_color_id = int(request.form.get('color'))
-        nueva_capacidad_carga = int(request.form.get('capacidadCarga'))
-        nuevo_marca_id = int(request.form.get('marca'))
-        nuevo_ejes_id = int(request.form.get('Ejes'))
-        data_manager.edit_trailer_by_id(trailer_id, nueva_matricula, nuevo_modelo, nuevo_color_id, nueva_capacidad_carga, nuevo_marca_id, nuevo_ejes_id)
-        flash('Trailer actualizado correctamente', 'success')
-        return redirect(url_for('index'))
-
-    colores = mongo.db.colores.find()
-    marcas = mongo.db.marcas.find()
-
-    return render_template('trailer/actualizarTrailer.html', trailer=trailer, colores=colores, marcas=marcas)
-
-
+    return update_trailer(mongo, data_manager, trailer_id)
 
 @app.route('/eliminar_trailer/<string:trailer_id>', methods=['GET', 'POST'])
 def eliminar_trailer(trailer_id):
-
-    marcas = mongo.db.marcas.find()
-    colores = mongo.db.colores.find()
-    trailer = mongo.db.trailer.find_one({'_id': ObjectId(trailer_id)})
-    
-    # Obtener información de la marca y el color utilizando sus IDs en el trailer
-    marca_id = trailer.get('marca_id')
-    color_id = trailer.get('color_id')
-    
-    marca = mongo.db.marcas.find_one({'_id': marca_id})
-    color = mongo.db.colores.find_one({'_id': color_id})
-    
-    if request.method == 'POST' and 'confirm_delete' in request.form:
-        # Eliminar el trailer
-        data_manager.delete_trailer(trailer_id)
-        flash('Trailer eliminado correctamente', 'success')
-        return redirect(url_for('index'))
-    return render_template('trailer/eliminarTrailer.html', trailer=trailer, marca=marca, color=color, marcas=marcas, colores=colores, url_for=url_for)
-
-
+    return delete_trailer(trailer_id, mongo, data_manager)
 
 
 
 
 @app.route('/clientes/')
 def index_clientes():
-    clientes = data_manager.get_clientes()
-    return render_template('clientes/index.html', clientes=clientes)
+    return clientes_home(data_manager)
 
 # Nueva ruta para renderizar la plantilla agregarTrailer.html
 @app.route('/clientes/formulario_agregar_cliente')
 def formulario_agregar_cliente():
-    genero = mongo.db.genero.find()
-    provincias = mongo.db.provincias.find()
-
-    # Pasar la lista de colores a la plantilla
-    return render_template('clientes/agregarCliente.html', provincias=provincias, genero=genero)
+    return cliente_form(mongo)
 
 @app.route('/clientes/agregar_cliente', methods=['POST'])
 def agregar_cliente():
-    if request.method == 'POST':
-        nombres = request.form.get('nombres')
-        cedula = request.form.get('cedula')
-        correo = request.form.get('correo')
-        direccion = request.form.get('direccion')
-        provincia_id = int(request.form.get('provincia'))
-        genero_id = int(request.form.get('genero'))
-
-        data_manager.add_cliente(nombres, cedula, correo, direccion, provincia_id, genero_id)
-
-        flash('Cliente agregado correctamente', 'success')
-        return redirect(url_for('index_clientes'))
+    return add_cliente(data_manager)
+    
 
 @app.route('/clientes/editar_cliente/<string:cliente_id>', methods=['GET', 'POST'])
 def editar_cliente(cliente_id):
-    cliente = mongo.db.clientes.find_one({'_id': ObjectId(cliente_id)})
-
-    if request.method == 'POST':
-        # Obtén los datos actualizados del formulario y actualiza el cliente
-        nuevo_nombres = request.form.get('nombres')
-        nueva_cedula = request.form.get('cedula')
-        nuevo_correo = request.form.get('correo')
-        nueva_direccion = request.form.get('direccion')
-        nueva_provincia_id = int(request.form.get('provincia'))
-        nuevo_genero_id = int(request.form.get('genero'))
-
-        data_manager.edit_cliente_by_id(cliente_id, nuevo_nombres, nueva_cedula, nuevo_correo, nueva_direccion, nueva_provincia_id, nuevo_genero_id)
-        flash('Cliente actualizado correctamente', 'success')
-        return redirect(url_for('index_clientes'))
-
-    provincias = mongo.db.provincias.find()
-    genero = mongo.db.genero.find()
-
-    return render_template('clientes/actualizarCliente.html', cliente=cliente, provincias=provincias, genero=genero)
+    return update_cliente(mongo, cliente_id, data_manager)
 
 @app.route('/clientes/eliminar_cliente/<string:cliente_id>', methods=['GET', 'POST'])
 def eliminar_cliente(cliente_id):
-    generos = mongo.db.genero.find()
-    provincias = mongo.db.provincias.find()
-    cliente = mongo.db.clientes.find_one({'_id': ObjectId(cliente_id)})
+    return delete_cliente(cliente_id, mongo, data_manager)
 
-    # Obtener información de la provincia y el genero utilizando sus IDs en el cliente
-    provincia_id = cliente.get('provincia_id')
-    genero_id = cliente.get('genero_id')
-
-    provincia = mongo.db.provincias.find_one({'_id': provincia_id})
-    genero = mongo.db.genero.find_one({'_id': genero_id})
-
-    if request.method == 'POST' and 'confirm_delete' in request.form:
-        # Eliminar el cliente
-        data_manager.delete_cliente(cliente_id)
-        flash('Cliente eliminado correctamente', 'success')
-        return redirect(url_for('index_clientes'))
-
-    return render_template('clientes/eliminarCliente.html', cliente=cliente, provincia=provincia, genero=genero, generos=generos, provincias=provincias, url_for=url_for)
 
 
 # Ruta de ejemplo para probar la conexión

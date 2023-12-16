@@ -9,8 +9,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <!-- CDN font awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css">
-    <title>Agregar Trailer</title>
-    <script src="{{ url_for('static', filename='js/sweetalert2@10.js') }}"></script>
+    <title>Actualizar Trailer</title>    
 
 </head>
 
@@ -28,13 +27,13 @@
                     <div class="right"></div>
                 </div>
                 <li class="nav-item">
-                    <a class="nav-link active text-primary" href="{{ url_for('index') }}"><i
+                    <a class="nav-link " href="{{ url_for('index') }}" target="_blank"><i
                             class="fas fa-tachometer-alt"></i>Trailer</a>
                 </li>
                 <li class="nav-item ">
-                    <a class="nav-link  " href="javascript:void(0);" target="_blank"><i
+                    <a class="nav-link active text-primary" href="javascript:void(0);" target="_blank"><i
                             class="far fa-address-book"></i>Clientes
-                        Book</a>
+                        </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="javascript:void(0);"><i class="far fa-clone"></i>Components</a>
@@ -54,74 +53,58 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col-12">
-                <h1 class="">Agregar Trailer</h1>
+                <h1 class="">Actualizar Cliente</h1>
                 <hr>
-                <form method="POST" action="{{ url_for('agregar_trailer') }}">
+                <form method="POST" action="{{ url_for('editar_cliente', cliente_id=cliente['_id']) }}">
                     <div class="row">
                         <div class="col-6">
-                            <label for="matricula" class="form-label">Matricula</label>
-                            <input placeholder="ABC-1234" type="text" class="form-control" id="matricula" name="matricula" required>
+                            <label for="nombres" class="form-label">Nombres:</label>
+                            <input placeholder="Nombre Apellido" type="text" class="form-control" id="nombres" name="nombres" value="{{ cliente['nombres'] }}" required>
                         </div>
                         <div class="col-6">
-                            <label for="ejes" class="form-label">Ejes</label>
-                            <select class="form-select" id="ejes" name="Ejes" required>
-                                <option value="" disabled selected>Escoge una opción</option>
-                                <option value="1">1 Eje</option>
-                                <option value="2">2 Ejes</option>
-                                <option value="3">3 Ejes</option>
-                                <option value="4">4 Ejes</option>
-                                <option value="5">5 Ejes</option>
-                                <option value="6">6 Ejes</option>
-                            </select>
-                        </div>
-                        
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-6">
-                            <label for="marca" class="form-label">Marca:</label>
-                            <select class="form-select" name="marca" id="marca" required>
-                                <option value="" disabled selected>Escoge una opción</option>
-                                {% for marca in marcas %}
-                                <option value="{{ marca._id }}">{{ marca.nombre }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-6">
-                            <label for="modelo" class="form-label">Modelo</label>
-                            <input type="text" class="form-control" id="modelo" name="modelo" required>
+                            <label for="cedula" class="form-label">Cédula:</label>
+                            <input placeholder="23XXXXXXX0" type="text" class="form-control" id="cedula" name="cedula" value="{{ cliente['cedula'] }}" required>
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-6">
-                            <label for="color" class="form-label">Color:</label>
-                            <select class="form-select" name="color" id="color" required>
-                                <option value="" disabled selected>Escoge una opción</option>
-                                {% for color in colores %}
-                                <option value="{{ color._id }}">{{ color.nombre }}</option>
+                            <label for="correo" class="form-label">Correo:</label>
+                            <input placeholder="example@gmail.com" type="text" class="form-control" id="correo" name="correo" value="{{ cliente['correo'] }}" required>
+                        </div>
+                        <div class="col-6">
+                            <label for="direccion" class="form-label">Dirección:</label>
+                            <input placeholder="Calle 123" type="text" class="form-control" id="direccion" name="direccion" value="{{ cliente['direccion'] }}" required>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-6">
+                            <label for="provincia" class="form-label">Provincia:</label>
+                            <select class="form-select" name="provincia" id="provincia">
+                                {% for provincia in provincias %}
+                                    <option value="{{ provincia._id }}" {% if provincia._id == cliente['provincia_id'] %}selected{% endif %}>{{ provincia.nombre }}</option>
                                 {% endfor %}
                             </select>
                         </div>
                         <div class="col-6">
-                            <label for="capacidadCarga" class="form-label">Capacidad de Carga</label>
-                            <input  placeholder="Capacidad de carga en Toneladas"
-                            type="number" class="form-control" id="capacidadCarga" name="capacidadCarga"
-                                required>
+                            <label for="genero" class="form-label">Género:</label>
+                            <select class="form-select" name="genero" id="genero">
+                                {% for genero in genero %}
+                                    <option value="{{ genero._id }}" {% if genero._id == cliente['genero_id'] %}selected{% endif %}>{{ genero.nombre }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
-                    <div class="row mt-3 text-center">
+                    <div class="row mt-5">
                         <div class="col-md-12">
-                            <button type="submit" class="btn btn-primary btn-block">Agregar Trailer</button>
-                            <a href="{{ url_for('index') }}" class="btn btn-danger btn-block ">Volver al inicio</a>
-                        </div>
-                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-primary btn-block">Actualizar Cliente</button>
+                            <a href="{{ url_for('index_clientes') }}" class="btn btn-secondary btn-block">Volver al inicio</a>
                         </div>
                     </div>
-
-
                 </form>
             </div>
         </div>
     </div>
+    
 
 
 
@@ -142,15 +125,6 @@
     </script>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-
-
-
-
-
-
-
-
-
     <!--script de bs5 -->
     <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>

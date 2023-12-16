@@ -29,7 +29,6 @@ class DataManager:
                 'capacidad_carga': trailer['capacidad_carga']
             }
             trailers_con_colores.append(trailer_con_color)
-
         return trailers_con_colores
 
     def add_trailer(self, matricula, Ejes, marca_id, modelo, color_id, capacidad_carga):
@@ -41,7 +40,6 @@ class DataManager:
             'color_id': color_id,
             'capacidad_carga': capacidad_carga
         }
-
         self.mongo.db.trailer.insert_one(nuevo_trailer)
 
     def edit_trailer_by_id(self, trailer_id, nueva_matricula, nuevo_modelo, nuevo_color_id, nueva_capacidad_carga, nuevo_marca_id, nuevo_ejes_id):
@@ -77,16 +75,17 @@ class DataManager:
     def get_clientes(self):
         clientes = self.mongo.db.clientes.find()
         generos = {genero['_id']: genero['nombre']
-                for genero in self.mongo.db.genero.find()}
+                   for genero in self.mongo.db.genero.find()}
         provincias = {provincia['_id']: provincia['nombre']
-                    for provincia in self.mongo.db.provincias.find()}
+                      for provincia in self.mongo.db.provincias.find()}
         clientes_con_datos = []
 
         for cliente in clientes:
             genero_id = cliente.get('genero_id')
             genero_nombre = generos.get(genero_id, 'Género Desconocido')
             provincia_id = cliente.get('provincia_id')
-            provincia_nombre = provincias.get(provincia_id, 'Provincia Desconocida')
+            provincia_nombre = provincias.get(
+                provincia_id, 'Provincia Desconocida')
             cliente_con_datos = {
                 '_id': str(cliente['_id']),
                 'nombres': cliente['nombres'],
@@ -100,8 +99,8 @@ class DataManager:
 
         return clientes_con_datos
 
-    
     # En data_manager.py
+
     def add_cliente(self, nombres, cedula, correo, direccion, provincia_id, genero_id):
         nuevo_cliente = {
             'nombres': nombres,
@@ -126,9 +125,10 @@ class DataManager:
                 'genero_id': nuevo_genero_id
             }}
         )
-        
+
     def delete_cliente(self, cliente_id):
-        cliente = self.mongo.db.clientes.find_one({'_id': ObjectId(cliente_id)})
+        cliente = self.mongo.db.clientes.find_one(
+            {'_id': ObjectId(cliente_id)})
 
         if cliente:
             provincia = self.mongo.db.provincias.find_one(

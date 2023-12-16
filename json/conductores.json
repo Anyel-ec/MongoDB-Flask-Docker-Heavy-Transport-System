@@ -2,6 +2,9 @@
     "Conductor": {
         "_id": 1,
         "nombre": "Jhon Zambrano",
+        "telefono": "0987654321",
+        "fecha_nacimiento": "1990-01-01",
+        "correo": "example",
         "genero_id": 1,
         "cedula": "2300287146",
         "trailer_id": 1
