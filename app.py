@@ -26,6 +26,15 @@ def index():
     trailers_con_colores = data_manager.get_trailers_with_colors()
     return render_template('trailer/index.html', trailers=trailers_con_colores)
 
+# Nueva ruta para renderizar la plantilla agregarTrailer.html
+@app.route('/formulario_agregar_trailer')
+def formulario_agregar_trailer():
+    # Obtener los colores desde la colección "colores"
+    colores = mongo.db.colores.find()
+    marcas = mongo.db.marcas.find()
+
+    # Pasar la lista de colores a la plantilla
+    return render_template('trailer/agregarTrailer.html', colores=colores, marcas=marcas)
 
 @app.route('/agregar_trailer', methods=['POST'])
 def agregar_trailer():
@@ -64,23 +73,24 @@ def editar_trailer(matricula):
 
 @app.route('/eliminar_trailer/<string:matricula>', methods=['GET', 'POST'])
 def eliminar_trailer(matricula):
-    trailer = mongo.db.trailer.find_one({'matricula': matricula})
-    if request.method == 'POST' and 'confirm_delete' in request.form:
-        trailer, marca, color = data_manager.delete_trailer(matricula)
-        flash('Trailer eliminado correctamente', 'danger')
-        return redirect(url_for('index'))
-
-    return render_template('trailer/eliminarTrailer.html', trailer=trailer, marca=marca, color=color)
-
-# Nueva ruta para renderizar la plantilla agregarTrailer.html
-@app.route('/formulario_agregar_trailer')
-def formulario_agregar_trailer():
-    # Obtener los colores desde la colección "colores"
-    colores = mongo.db.colores.find()
     marcas = mongo.db.marcas.find()
-
-    # Pasar la lista de colores a la plantilla
-    return render_template('trailer/agregarTrailer.html', colores=colores, marcas=marcas)
+    colores = mongo.db.colores.find()
+    trailer = mongo.db.trailer.find_one({'matricula': matricula})
+    
+    # Obtener información de la marca y el color utilizando sus IDs en el trailer
+    marca_id = trailer.get('marca_id')
+    color_id = trailer.get('color_id')
+    
+    marca = mongo.db.marcas.find_one({'_id': marca_id})
+    color = mongo.db.colores.find_one({'_id': color_id})
+    
+    if request.method == 'POST' and 'confirm_delete' in request.form:
+        # Eliminar el trailer
+        data_manager.delete_trailer(matricula)
+        flash('Trailer eliminado correctamente', 'success')
+        return redirect(url_for('index'))
+        
+    return render_template('trailer/eliminarTrailer.html', trailer=trailer, marca=marca, color=color, marcas=marcas, colores=colores)
 
 
 # Ruta de ejemplo para probar la conexión
