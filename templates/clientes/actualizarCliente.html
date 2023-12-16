@@ -27,11 +27,11 @@
                     <div class="right"></div>
                 </div>
                 <li class="nav-item">
-                    <a class="nav-link active text-primary" href="{{ url_for('index') }}"><i
+                    <a class="nav-link " href="{{ url_for('index') }}" target="_blank"><i
                             class="fas fa-tachometer-alt"></i>Trailer</a>
                 </li>
                 <li class="nav-item ">
-                    <a class="nav-link  " href="javascript:void(0);" target="_blank"><i
+                    <a class="nav-link active text-primary" href="javascript:void(0);" target="_blank"><i
                             class="far fa-address-book"></i>Clientes
                         </a>
                 </li>
@@ -53,65 +53,58 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col-12">
-                <h1 class="">Actualizar Trailer</h1>
+                <h1 class="">Actualizar Cliente</h1>
                 <hr>
-                <form method="POST" action="{{ url_for('editar_trailer', trailer_id=trailer['_id']) }}">
+                <form method="POST" action="{{ url_for('editar_cliente', cliente_id=cliente['_id']) }}">
                     <div class="row">
                         <div class="col-6">
-                            <label for="matricula" class="form-label">Matricula</label>
-                            <input placeholder="ABC-1234" type="text" class="form-control" id="matricula" name="matricula" value="{{ trailer['matricula'] }}">
+                            <label for="nombres" class="form-label">Nombres:</label>
+                            <input placeholder="Nombre Apellido" type="text" class="form-control" id="nombres" name="nombres" value="{{ cliente['nombres'] }}" required>
                         </div>
                         <div class="col-6">
-                            <label for="ejes" class="form-label">Ejes</label>
-                            <select class="form-select" id="ejes" name="Ejes" required>
-                                <option value="1" {% if trailer['Ejes'] == 1 %}selected{% endif %}>1 Eje</option>
-                                <option value="2" {% if trailer['Ejes'] == 2 %}selected{% endif %}>2 Ejes</option>
-                                <option value="3" {% if trailer['Ejes'] == 3 %}selected{% endif %}>3 Ejes</option>
-                                <option value="4" {% if trailer['Ejes'] == 4 %}selected{% endif %}>4 Ejes</option>
-                                <option value="5" {% if trailer['Ejes'] == 5 %}selected{% endif %}>5 Ejes</option>
-                                <option value="6" {% if trailer['Ejes'] == 6 %}selected{% endif %}>6 Ejes</option>
-                            </select>
+                            <label for="cedula" class="form-label">Cédula:</label>
+                            <input placeholder="23XXXXXXX0" type="text" class="form-control" id="cedula" name="cedula" value="{{ cliente['cedula'] }}" required>
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-6">
-                            <label for="marca" class="form-label">Marca:</label>
-                            <select class="form-select" name="marca" id="marca">
-                                {% for marca in marcas %}
-                                    <option value="{{ marca._id }}" {% if marca._id == trailer['marca_id'] %}selected{% endif %}>{{ marca.nombre }}</option>
-                                {% endfor %}
-                            </select>
+                            <label for="correo" class="form-label">Correo:</label>
+                            <input placeholder="example@gmail.com" type="text" class="form-control" id="correo" name="correo" value="{{ cliente['correo'] }}" required>
                         </div>
                         <div class="col-6">
-                            <label for="modelo" class="form-label">Modelo</label>
-                            <input type="text" class="form-control" id="modelo" name="modelo" value="{{ trailer['modelo'] }}" required>
+                            <label for="direccion" class="form-label">Dirección:</label>
+                            <input placeholder="Calle 123" type="text" class="form-control" id="direccion" name="direccion" value="{{ cliente['direccion'] }}" required>
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-6">
-                            <label for="color" class="form-label">Color:</label>
-                            <select class="form-select" name="color" id="color">
-                                {% for color in colores %}
-                                    <option value="{{ color._id }}" {% if color._id == trailer['color_id'] %}selected{% endif %}>{{ color.nombre }}</option>
+                            <label for="provincia" class="form-label">Provincia:</label>
+                            <select class="form-select" name="provincia" id="provincia">
+                                {% for provincia in provincias %}
+                                    <option value="{{ provincia._id }}" {% if provincia._id == cliente['provincia_id'] %}selected{% endif %}>{{ provincia.nombre }}</option>
                                 {% endfor %}
                             </select>
                         </div>
                         <div class="col-6">
-                            <label for="capacidadCarga" class="form-label">Capacidad de Carga</label>
-                            <input placeholder="Capacidad de carga en Toneladas" type="number" class="form-control" id="capacidadCarga" name="capacidadCarga" value="{{ trailer['capacidad_carga'] }}" required>
+                            <label for="genero" class="form-label">Género:</label>
+                            <select class="form-select" name="genero" id="genero">
+                                {% for genero in genero %}
+                                    <option value="{{ genero._id }}" {% if genero._id == cliente['genero_id'] %}selected{% endif %}>{{ genero.nombre }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
                     <div class="row mt-5">
                         <div class="col-md-12">
-                            <button type="submit" class="btn btn-primary btn-block">Actualizar Trailer</button>
-                            <a href="{{ url_for('index') }}" class="btn btn-secondary btn-block">Volver al inicio</a>
+                            <button type="submit" class="btn btn-primary btn-block">Actualizar Cliente</button>
+                            <a href="{{ url_for('index_clientes') }}" class="btn btn-secondary btn-block">Volver al inicio</a>
                         </div>
                     </div>
                 </form>
-                
             </div>
         </div>
     </div>
+    
 
 
 

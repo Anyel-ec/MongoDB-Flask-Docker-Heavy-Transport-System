@@ -53,37 +53,40 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col-12">
-                <h3>¿Está seguro que desea borrar este trailer?</h3>
+                <h3>¿Está seguro que desea borrar este cliente?</h3>
                 <table class="table table-bordered">
                     <tbody>
                         <tr>
-                            <th>Matrícula</th>
-                            <td>{{ trailer['matricula'] }}</td>
+                            <th>Nombres</th>
+                            <td>{{ cliente['nombres'] }}</td>
                         </tr>
                         <tr>
-                            <th>Ejes</th>
-                            <td>{{ trailer['Ejes'] }}</td>
+                            <th>Cédula</th>
+                            <td>{{ cliente['cedula'] }}</td>
                         </tr>
                         <tr>
-                            <th>Marca</th>
-                            <td>{{ marca['nombre'] if marca else 'Desconocida' }}</td>
+                            <th>Correo</th>
+                            <td>{{ cliente['correo'] }}</td>
                         </tr>
                         <tr>
-                            <th>Color</th>
-                            <td>{{ color['nombre'] if color else 'Desconocido' }}</td>
+                            <th>Dirección</th>
+                            <td>{{ cliente['direccion'] }}</td>
                         </tr>
                         <tr>
-                            <th>Capacidad de Carga</th>
-                            <td>{{ trailer['capacidad_carga'] }}</td>
+                            <th>Provincia</th>
+                            <td>{{ provincia['nombre'] if provincia else 'Desconocida' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Género</th>
+                            <td>{{ genero['nombre'] if genero else 'Desconocido' }}</td>
                         </tr>
                     </tbody>
                 </table>
 
                 <form method="POST">
                     <button type="submit" name="confirm_delete" class="btn btn-danger">Sí, Borrar</button>
-                    <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancelar</a>
+                    <a href="{{ url_for('index_clientes') }}" class="btn btn-secondary">Cancelar</a>
                 </form>
-                
             </div>
         </div>
     </div>

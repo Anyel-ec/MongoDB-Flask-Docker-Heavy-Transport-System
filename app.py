@@ -23,8 +23,8 @@ data_manager = DataManager(mongo)
 
 @app.route('/')
 def index():
-    trailers_con_colores = data_manager.get_trailers_with_colors()
-    return render_template('trailer/index.html', trailers=trailers_con_colores)
+    trailers = data_manager.get_trailers()
+    return render_template('trailer/index.html', trailers=trailers)
 
 # Nueva ruta para renderizar la plantilla agregarTrailer.html
 @app.route('/formulario_agregar_trailer')
@@ -51,7 +51,7 @@ def agregar_trailer():
         flash('Trailer agregado correctamente', 'success')
         return redirect(url_for('index'))
 
-# En app.py
+# Editar cliente
 @app.route('/editar_trailer/<string:trailer_id>', methods=['GET', 'POST'])
 def editar_trailer(trailer_id):
     trailer = mongo.db.trailer.find_one({'_id': ObjectId(trailer_id)})
@@ -94,6 +94,83 @@ def eliminar_trailer(trailer_id):
         flash('Trailer eliminado correctamente', 'success')
         return redirect(url_for('index'))
     return render_template('trailer/eliminarTrailer.html', trailer=trailer, marca=marca, color=color, marcas=marcas, colores=colores, url_for=url_for)
+
+
+
+
+
+
+@app.route('/clientes/')
+def index_clientes():
+    clientes = data_manager.get_clientes()
+    return render_template('clientes/index.html', clientes=clientes)
+
+# Nueva ruta para renderizar la plantilla agregarTrailer.html
+@app.route('/clientes/formulario_agregar_cliente')
+def formulario_agregar_cliente():
+    genero = mongo.db.genero.find()
+    provincias = mongo.db.provincias.find()
+
+    # Pasar la lista de colores a la plantilla
+    return render_template('clientes/agregarCliente.html', provincias=provincias, genero=genero)
+
+@app.route('/clientes/agregar_cliente', methods=['POST'])
+def agregar_cliente():
+    if request.method == 'POST':
+        nombres = request.form.get('nombres')
+        cedula = request.form.get('cedula')
+        correo = request.form.get('correo')
+        direccion = request.form.get('direccion')
+        provincia_id = int(request.form.get('provincia'))
+        genero_id = int(request.form.get('genero'))
+
+        data_manager.add_cliente(nombres, cedula, correo, direccion, provincia_id, genero_id)
+
+        flash('Cliente agregado correctamente', 'success')
+        return redirect(url_for('index_clientes'))
+
+@app.route('/clientes/editar_cliente/<string:cliente_id>', methods=['GET', 'POST'])
+def editar_cliente(cliente_id):
+    cliente = mongo.db.clientes.find_one({'_id': ObjectId(cliente_id)})
+
+    if request.method == 'POST':
+        # Obtén los datos actualizados del formulario y actualiza el cliente
+        nuevo_nombres = request.form.get('nombres')
+        nueva_cedula = request.form.get('cedula')
+        nuevo_correo = request.form.get('correo')
+        nueva_direccion = request.form.get('direccion')
+        nueva_provincia_id = int(request.form.get('provincia'))
+        nuevo_genero_id = int(request.form.get('genero'))
+
+        data_manager.edit_cliente_by_id(cliente_id, nuevo_nombres, nueva_cedula, nuevo_correo, nueva_direccion, nueva_provincia_id, nuevo_genero_id)
+        flash('Cliente actualizado correctamente', 'success')
+        return redirect(url_for('index_clientes'))
+
+    provincias = mongo.db.provincias.find()
+    genero = mongo.db.genero.find()
+
+    return render_template('clientes/actualizarCliente.html', cliente=cliente, provincias=provincias, genero=genero)
+
+@app.route('/clientes/eliminar_cliente/<string:cliente_id>', methods=['GET', 'POST'])
+def eliminar_cliente(cliente_id):
+    generos = mongo.db.genero.find()
+    provincias = mongo.db.provincias.find()
+    cliente = mongo.db.clientes.find_one({'_id': ObjectId(cliente_id)})
+
+    # Obtener información de la provincia y el genero utilizando sus IDs en el cliente
+    provincia_id = cliente.get('provincia_id')
+    genero_id = cliente.get('genero_id')
+
+    provincia = mongo.db.provincias.find_one({'_id': provincia_id})
+    genero = mongo.db.genero.find_one({'_id': genero_id})
+
+    if request.method == 'POST' and 'confirm_delete' in request.form:
+        # Eliminar el cliente
+        data_manager.delete_cliente(cliente_id)
+        flash('Cliente eliminado correctamente', 'success')
+        return redirect(url_for('index_clientes'))
+
+    return render_template('clientes/eliminarCliente.html', cliente=cliente, provincia=provincia, genero=genero, generos=generos, provincias=provincias, url_for=url_for)
 
 
 # Ruta de ejemplo para probar la conexión

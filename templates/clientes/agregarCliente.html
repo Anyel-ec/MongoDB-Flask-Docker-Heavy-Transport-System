@@ -28,13 +28,13 @@
                     <div class="right"></div>
                 </div>
                 <li class="nav-item">
-                    <a class="nav-link active text-primary" href="{{ url_for('index') }}"><i
+                    <a class="nav-link " href="{{ url_for('index') }}" target="_blank"><i
                             class="fas fa-tachometer-alt"></i>Trailer</a>
                 </li>
                 <li class="nav-item ">
-                    <a class="nav-link  " href="javascript:void(0);" target="_blank"><i
+                    <a class="nav-link active text-primary" href="javascript:void(0);" target="_blank"><i
                             class="far fa-address-book"></i>Clientes
-                        Book</a>
+                        </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="javascript:void(0);"><i class="far fa-clone"></i>Components</a>
@@ -54,61 +54,53 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col-12">
-                <h1 class="">Agregar Trailer</h1>
+                <h1 class="">Agregar Cliente</h1>
                 <hr>
-                <form method="POST" action="{{ url_for('agregar_trailer') }}">
+                <form method="POST" action="{{ url_for('agregar_cliente') }}">
                     <div class="row">
                         <div class="col-6">
-                            <label for="matricula" class="form-label">Matricula</label>
-                            <input placeholder="ABC-1234" type="text" class="form-control" id="matricula" name="matricula" required>
+                            <label for="nombres" class="form-label">Nombres: </label>
+                            <input placeholder="Nombre Apellido" type="text" class="form-control" id="nombre" name="nombres" required>
                         </div>
                         <div class="col-6">
-                            <label for="ejes" class="form-label">Ejes</label>
-                            <select class="form-select" id="ejes" name="Ejes" required>
-                                <option value="1">1 Eje</option>
-                                <option value="2">2 Ejes</option>
-                                <option value="3">3 Ejes</option>
-                                <option value="4">4 Ejes</option>
-                                <option value="5">5 Ejes</option>
-                                <option value="6">6 Ejes</option>
-                            </select>
-                        </div>
-                        
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-6">
-                            <label for="marca" class="form-label">Color:</label>
-                            <select class="form-select" name="marca" id="marca">
-                                {% for marca in marcas %}
-                                <option value="{{ marca._id }}">{{ marca.nombre }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-6">
-                            <label for="modelo" class="form-label">Modelo</label>
-                            <input type="text" class="form-control" id="modelo" name="modelo" required>
+                            <label for="cedula" class="form-label">Cedula: </label>
+                            <input placeholder="23XXXXXXX0" type="text" class="form-control" id="cedula" name="cedula" required>
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-6">
-                            <label for="color" class="form-label">Color:</label>
-                            <select class="form-select" name="color" id="color">
-                                {% for color in colores %}
-                                <option value="{{ color._id }}">{{ color.nombre }}</option>
+                            <label for="correo" class="form-label">Correo: </label>
+                            <input placeholder="example@gmail.com" type="text" class="form-control" id="correo" name="correo" required>
+                        </div>
+                        <div class="col-6">
+                            <label for="direccion" class="form-label">Direccion</label>
+                            <input  placeholder="Calle 123" type="text" class="form-control" id="direccion" name="direccion" required>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-6">
+                            <label for="provincia" class="form-label">Provincia:</label>
+                            <select class="form-select" name="provincia" id="provincia" required>
+                                <option value="" disabled selected>Escoge una opción</option>
+                                {% for provincia in provincias %}
+                                <option value="{{ provincia._id }}">{{ provincia.nombre }}</option>
                                 {% endfor %}
                             </select>
                         </div>
                         <div class="col-6">
-                            <label for="capacidadCarga" class="form-label">Capacidad de Carga</label>
-                            <input  placeholder="Capacidad de carga en Toneladas"
-                            type="number" class="form-control" id="capacidadCarga" name="capacidadCarga"
-                                required>
+                            <label for="genero" class="form-label">Género: </label>
+                            <select class="form-select" name="genero" id="genero" required>
+                                <option value="" disabled selected>Escoge una opción</option>
+                                {% for genero in genero %}
+                                <option value="{{ genero._id }}">{{ genero.nombre }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
                     <div class="row mt-3 text-center">
                         <div class="col-md-12">
-                            <button type="submit" class="btn btn-primary btn-block">Agregar Trailer</button>
-                            <a href="{{ url_for('index') }}" class="btn btn-danger btn-block ">Volver al inicio</a>
+                            <button type="submit" class="btn btn-primary btn-block">Agregar Cliente</button>
+                            <a href="{{ url_for('index_clientes') }}" class="btn btn-danger btn-block ">Volver al inicio</a>
                         </div>
                         <div class="col-md-6">
                         </div>
