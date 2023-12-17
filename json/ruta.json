@@ -1,0 +1,13 @@
+{
+    "_id": "5f1a3a6b9d5f3e1b7c9f3b1a",
+    "cliente": 1,
+    "Provincia Inicio": 1, 
+    "hora_inicio": "2020-07-23T15:00:00.000Z",
+    "Ubicacion Inicio": "Calle 1 # 1-1",
+    "Provincia Final": 2,
+    "hora_final": "2020-07-23T16:00:00.000Z",
+    "Ubicacion Final": "Calle 2 # 2-2",
+    "tipos_carga": 1, 
+    "categoria_carga": 1,
+    "conductor_responsable": 1
+}

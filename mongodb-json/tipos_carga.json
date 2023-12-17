@@ -1,0 +1,17 @@
+[
+    { "_id": 1, "nombre": "Productos Electrónicos" },
+    { "_id": 2, "nombre": "Alimentos Perecederos" },
+    { "_id": 3, "nombre": "Productos Químicos" },
+    { "_id": 4, "nombre": "Materiales de Construcción" },
+    { "_id": 5, "nombre": "Automóviles y Vehículos" },
+    { "_id": 6, "nombre": "Ropa y Textiles" },
+    { "_id": 7, "nombre": "Productos Farmacéuticos" },
+    { "_id": 8, "nombre": "Madera y Productos Forestales" },
+    { "_id": 9, "nombre": "Productos a Granel Secos" },
+    { "_id": 10, "nombre": "Equipos Industriales" },
+    { "_id": 11, "nombre": "Carga General" },
+    { "_id": 12, "nombre": "Contenedores Intermodales" },
+    { "_id": 13, "nombre": "Productos de Consumo" },
+    { "_id": 14, "nombre": "Productos Metalúrgicos" },
+    { "_id": 15, "nombre": "Productos de Papel y Cartón" }
+]

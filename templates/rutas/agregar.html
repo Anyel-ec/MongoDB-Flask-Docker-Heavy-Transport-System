@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dataTables.bootstrap5.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- CDN font awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css">
+    <title>Agregar Conductor</title>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-custom navbar-mainbg">
+        <a class="navbar-brand navbar-logo" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <i class="fas fa-bars text-white"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <div class="hori-selector">
+                    <div class="left"></div>
+                    <div class="right"></div>
+                </div>
+                <li class="nav-item">
+                    <a class="nav-link " href="{{ url_for('index') }}" target="_blank"><i
+                            class="fas fa-tachometer-alt"></i>Trailer</a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link active text-primary" href="javascript:void(0);" target="_blank"><i
+                            class="far fa-address-book"></i>Clientes
+                        </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:void(0);"><i class="far fa-clone"></i>Components</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:void(0);"><i class="far fa-calendar-alt"></i>Calendar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:void(0);"><i class="far fa-chart-bar"></i>Charts</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:void(0);"><i class="far fa-copy"></i>Documents</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="">Agregar Rutas</h1>
+                <hr>
+                <form method="POST" action="{{ url_for('agregar_ruta') }}">
+                    <div class="row mt-3">
+                        <div class="col-6">
+                            <label for="cliente" class="form-label">Cliente: </label>
+                            <select class="form-select" name="cliente" id="cliente" required>
+                                <option value="" disabled selected>Escoge una opción</option>
+                                {% for cliente in cliente %}
+                                <option value="{{ cliente._id }}" >{{ cliente.nombres }} </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label for="conductor" class="form-label">Conductor Responsable: </label>
+                            <select class="form-select" name="conductor" id="conductor" required>
+                                <option value="" disabled selected>Escoge una opción</option>
+                                {% for conductor in conductor %}
+                                <option value="{{ conductor._id }}">{{ conductor.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-6">
+                            <label for="provincia_inicio" class="form-label">Provincia de Inicio: </label>
+                            <select class="form-select" name="provincia_inicio" id="provincia_inicio" required>
+                                <option value="" disabled selected>Escoge una opción</option>
+                                {% for provincia_inicio in provincia_inicio %}
+                                <option value="{{ provincia_inicio._id }}">{{ provincia_inicio.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label for="provincia_fin" class="form-label">Provincia de Fin: </label>
+                            <select class="form-select" name="provincia_fin" id="provincia_fin" required>
+                                <option value="" disabled selected>Escoge una opción</option>
+                                {% for provincia_fin in provincia_fin %}
+                                <option value="{{ provincia_fin._id }}">{{ provincia_fin.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-6">
+                            <label for="ubicacion_inicio" class="form-label">Ubicación de Inicio: </label>
+                            <input placeholder="Calle 123" type="text" class="form-control" id="ubicacion_inicio" name="ubicacion_inicio" required>
+                        </div><div class="col-6">
+                            <label for="ubicacion_fin" class="form-label">Ubicación de Fin: </label>
+                            <input placeholder="Calle 123" type="text" class="form-control" id="ubicacion_fin" name="ubicacion_fin" required>
+                        </div>                 
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-6">
+                            <label for="fecha_hora_inicio" class="form-label">Fecha y Hora de Inicio:</label>
+                            <input type="datetime-local" class="form-control" id="fecha_hora_inicio" name="fecha_hora_inicio" required>
+                        </div>
+                        <div class="col-6">
+                            <label for="fecha_hora_fin" class="form-label">Fecha y Hora de Fin:</label>
+                            <input type="datetime-local" class="form-control" id="fecha_hora_fin" name="fecha_hora_fin" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-3">
+                        <div class="col-6">
+                            <label for="tipo_carga" class="form-label">Tipo de Carga: </label>
+                            <select class="form-select" name="tipo_carga" id="tipo_carga" required>
+                                <option value="" disabled selected>Escoge una opción</option>
+                                {% for tipo_carga in tipo_carga %}
+                                <option value="{{ tipo_carga._id }}">{{ tipo_carga.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label for="categoria_carga" class="form-label">Categoría:</label>
+                            <select class="form-select" name="categoria_carga" id="categoria_carga" required>
+                                <option value="" disabled selected>Escoge una opción</option>
+                                {% for categoria_carga in categoria_carga %}
+                                <option value="{{ categoria_carga._id }}">{{ categoria_carga.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <button type="submit" class="btn btn-primary btn-block">Agregar Ruta</button>
+                            <a href="{{ url_for('index_rutas') }}" class="btn btn-secondary btn-block ">Volver al inicio</a>
+                        </div>
+                        <div class="col-md-6">
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#example').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"
+                }
+            });
+        });
+    </script>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+
+
+
+
+
+
+
+
+    <!--script de bs5 -->
+    <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script> -->
+
+</body>
+
+</html>

@@ -1,0 +1,17 @@
+[
+    { "_id": 1, "nombre": "Carga Frágil" },
+    { "_id": 2, "nombre": "Carga No Frágil" },
+    { "_id": 3, "nombre": "Carga Moderadamente Frágil" },
+    { "_id": 4, "nombre": "Carga Peligrosa" },
+    { "_id": 5, "nombre": "Carga Perecedera" },
+    { "_id": 6, "nombre": "Carga Química" },
+    { "_id": 7, "nombre": "Carga Voluminosa" },
+    { "_id": 8, "nombre": "Carga Sólida a Granel" },
+    { "_id": 9, "nombre": "Carga Líquida a Granel" },
+    { "_id": 10, "nombre": "Carga Refrigerada" },
+    { "_id": 11, "nombre": "Carga Sensible a la Temperatura" },
+    { "_id": 12, "nombre": "Carga Perecedera" },
+    { "_id": 13, "nombre": "Carga Seca" },
+    { "_id": 14, "nombre": "Carga Especializada" },
+    { "_id": 15, "nombre": "Carga de Maquinaria Pesada" }
+]

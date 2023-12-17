@@ -1,5 +1,6 @@
 from flask_pymongo import PyMongo
 from bson import ObjectId
+from datetime import datetime
 
 
 class DataManager:
@@ -217,3 +218,78 @@ class DataManager:
         return conductor, genero, trailer
     
 #########################################################################################################################
+     # RUTAS
+    
+    def get_rutas(self):
+        rutas = self.mongo.db.rutas.find()
+        clientes = {str(cliente['_id']): cliente['nombres']
+                    for cliente in self.mongo.db.clientes.find()}
+        conductores = {str(conductor['_id']): conductor['nombre']
+                    for conductor in self.mongo.db.conductores.find()}
+        provincias = {str(provincia['_id']): provincia['nombre']
+                    for provincia in self.mongo.db.provincias.find()}
+        tipos_carga = {str(tipo['_id']): tipo['nombre']
+                    for tipo in self.mongo.db.tipo_carga.find()}
+        categorias_carga = {str(categoria['_id']): categoria['nombre']
+                            for categoria in self.mongo.db.categoria_carga.find()}
+
+        rutas_con_info = []
+
+        for ruta in rutas:
+            cliente_id = str(ruta.get('cliente'))
+            cliente_nombre = clientes.get(cliente_id, 'Cliente Desconocido')
+
+            conductor_id = str(ruta.get('conductor_responsable'))
+            conductor_nombre = conductores.get(conductor_id, 'Conductor Desconocido')
+
+            provincia_inicio_id = str(ruta.get('provincia_inicio'))
+            provincia_inicio_nombre = provincias.get(provincia_inicio_id, 'Provincia Desconocida')
+
+            provincia_fin_id = str(ruta.get('provincia_fin'))
+            provincia_fin_nombre = provincias.get(provincia_fin_id, 'Provincia Desconocida')
+
+            tipo_carga_id = str(ruta.get('tipos_carga'))
+            tipo_carga_nombre = tipos_carga.get(tipo_carga_id, 'Tipo de Carga Desconocido')
+
+            categoria_carga_id = str(ruta.get('categoria_carga'))
+            categoria_carga_nombre = categorias_carga.get(categoria_carga_id, 'Categoría de Carga Desconocida')
+
+            ubicacion_inicio = ruta.get('ubicacion_inicio', 'Ubicación Desconocida')
+            ubicacion_fin = ruta.get('ubicacion_fin', 'Ubicación Desconocida')
+
+
+            ruta_con_info = {
+                '_id': str(ruta['_id']),
+                'cliente': cliente_nombre,
+                'conductor_responsable': conductor_nombre,
+                'provincia_inicio': provincia_inicio_nombre,
+                'hora_inicio': ruta.get('hora_inicio', 'Hora Desconocida'),
+                'ubicacion_inicio': ubicacion_inicio,
+                'provincia_fin': provincia_fin_nombre,
+                'hora_fin': ruta.get('hora_final', 'Hora Desconocida'),
+                'ubicacion_fin': ubicacion_fin,
+                'tipo_carga': tipo_carga_nombre,
+                'categoria_carga': categoria_carga_nombre
+            }
+
+            rutas_con_info.append(ruta_con_info)
+
+        return rutas_con_info
+
+
+
+    def add_ruta(self, cliente_id, conductor_id, provincia_inicio_id, hora_inicio, ubicacion_inicio, provincia_fin_id, hora_fin, ubicacion_fin, tipo_carga_id, categoria_carga_id):
+        nueva_ruta = {
+            'cliente': ObjectId(cliente_id),
+            'conductor_responsable': ObjectId(conductor_id),
+            'provincia_inicio': (provincia_inicio_id),
+            'hora_inicio': datetime.strptime(hora_fin, '%Y-%m-%dT%H:%M'),
+            'ubicacion_inicio': ubicacion_inicio,
+            'provincia_fin': (provincia_fin_id),
+            'hora_final': datetime.strptime(hora_fin, '%Y-%m-%dT%H:%M'),
+            'ubicacion_fin': ubicacion_fin,
+            'tipos_carga': (tipo_carga_id),
+            'categoria_carga': (categoria_carga_id)
+        }
+        self.mongo.db.rutas.insert_one(nueva_ruta)
+

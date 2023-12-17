@@ -7,7 +7,7 @@ from data_manager import DataManager
 from trailer_manager import trailer_inicio, trailer_form, add_trailer, update_trailer, delete_trailer
 from clientes_manager import clientes_home, cliente_form, add_cliente, update_cliente, delete_cliente
 from conductores_manager import conductores_home, conductor_form, add_conductor, update_conductor, delete_conductor
-
+from rutas_manager import rutas_home, rutas_form, add_ruta
 #Cargar variables de entorno desde el archivo .env
 load_dotenv()
 
@@ -89,7 +89,20 @@ def editar_conductor(conductor_id):
 def eliminar_conductor(conductor_id):
     return delete_conductor(conductor_id, mongo, data_manager)
 
+#######################################################################################################################
+# Ruta del Rutas
 
+@app.route('/rutas/')
+def index_rutas():
+    return rutas_home(data_manager)
+
+@app.route('/rutas/formulario')
+def formulario_agregar_rutas():
+    return rutas_form(mongo)
+
+@app.route('/rutas/agregar', methods=['POST'])
+def agregar_ruta():
+    return add_ruta(data_manager)
 
 
 
