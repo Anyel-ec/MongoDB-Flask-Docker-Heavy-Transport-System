@@ -8,6 +8,7 @@ from trailer_manager import trailer_inicio, trailer_form, add_trailer, update_tr
 from clientes_manager import clientes_home, cliente_form, add_cliente, update_cliente, delete_cliente
 from conductores_manager import conductores_home, conductor_form, add_conductor, update_conductor, delete_conductor
 from rutas_manager import rutas_home, rutas_form, add_ruta, update_ruta, delete_ruta
+from migration import migrar_datos
 #Cargar variables de entorno desde el archivo .env
 load_dotenv()
 
@@ -19,7 +20,7 @@ app.config['MONGO_URI'] = os.getenv('MONGO_URI')
 
 mongo = PyMongo(app)
 data_manager = DataManager(mongo)
-
+migrar_datos()
 #######################################################################################################################
 # Rutas del Trailer 
 @app.route('/')
@@ -136,5 +137,6 @@ def test_mongo_connection():
         return jsonify({'message': 'Error en la conexión a MongoDB', 'error': str(e)})
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    #aceptar todas las redes
+    app.run(port=5000, debug=True, host='0.0.0.0')
 
