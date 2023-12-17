@@ -74,7 +74,7 @@ def migrar_datos():
     ]
 
     # Colección en MongoDB para géneros
-    generos_collection = db['generos']
+    generos_collection = db['genero']
 
     # Operación replace_many para géneros
     for genero_record in generos_data:
