@@ -12,11 +12,42 @@
     <title>Agregar Trailer</title>
     <script src="{{ url_for('static', filename='js/sweetalert2@10.js') }}"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.js"></script>
+    <script>
+        function validarFormulario() {
+            var matricula = document.getElementById('matricula').value;
+            var capacidadCarga = document.getElementById('capacidadCarga').value;
+
+            // Validación de la matrícula
+            var matriculaRegex = /^[A-Z]{3}-\d{3}$/;
+            if (!matriculaRegex.test(matricula)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'La matrícula debe tener el formato ABC-123 (3 letras mayúsculas, guion medio y 3 números).'
+                });
+                return false;
+            }
+
+            // Validación de la capacidad de carga
+            if (isNaN(capacidadCarga) || capacidadCarga <= 0 || capacidadCarga > 100) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'La capacidad de carga debe ser un número positivo y estar entre 1 y 100.'
+                });
+                return false;
+            }
+
+            return true; // Envía el formulario si todas las validaciones son exitosas
+        }
+    </script>
+
 </head>
 
 <body>
     <nav class="navbar navbar-expand-custom navbar-mainbg">
-        <a class="navbar-brand navbar-logo" href="#">Navbar</a>
+        <a class="navbar-brand navbar-logo" href="#">Trailer</a>
         <button class="navbar-toggler" type="button" aria-controls="navbarSupportedContent" aria-expanded="false"
             aria-label="Toggle navigation">
             <i class="fas fa-bars text-white"></i>
@@ -32,35 +63,31 @@
                             class="fas fa-tachometer-alt"></i>Trailer</a>
                 </li>
                 <li class="nav-item ">
-                    <a class="nav-link  " href="javascript:void(0);" target="_blank"><i
-                            class="far fa-address-book"></i>Clientes
-                        Book</a>
+                    <a class="nav-link text-white" href="{{ url_for('index_clientes') }}"><i
+                            class="fas fa-users"></i>Clientes</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="javascript:void(0);"><i class="far fa-clone"></i>Components</a>
+                    <a class="nav-link text-white" href="{{ url_for('index_conductores') }}"><i
+                            class="fas fa-user-tie"></i>Conductores</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="javascript:void(0);"><i class="far fa-calendar-alt"></i>Calendar</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="javascript:void(0);"><i class="far fa-chart-bar"></i>Charts</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="javascript:void(0);"><i class="far fa-copy"></i>Documents</a>
+                    <a class="nav-link text-white" href="{{ url_for('index_rutas') }}"><i class="fas fa-route"></i>Rutas</a>
                 </li>
             </ul>
         </div>
     </nav>
+    
     <div class="container mt-5">
         <div class="row">
             <div class="col-12">
                 <h1 class="">Agregar Trailer</h1>
                 <hr>
-                <form method="POST" action="{{ url_for('agregar_trailer') }}">
+                <form method="POST" action="{{ url_for('agregar_trailer') }}" onsubmit="return validarFormulario()">
                     <div class="row">
                         <div class="col-6">
                             <label for="matricula" class="form-label">Matricula</label>
-                            <input placeholder="ABC-1234" type="text" class="form-control" id="matricula" name="matricula" required>
+                            <input placeholder="ABC-1234" type="text" class="form-control" id="matricula"
+                                name="matricula" required>
                         </div>
                         <div class="col-6">
                             <label for="ejes" class="form-label">Ejes</label>
@@ -74,7 +101,7 @@
                                 <option value="6">6 Ejes</option>
                             </select>
                         </div>
-                        
+
                     </div>
                     <div class="row mt-3">
                         <div class="col-6">
@@ -103,9 +130,8 @@
                         </div>
                         <div class="col-6">
                             <label for="capacidadCarga" class="form-label">Capacidad de Carga</label>
-                            <input  placeholder="Capacidad de carga en Toneladas"
-                            type="number" class="form-control" id="capacidadCarga" name="capacidadCarga"
-                                required>
+                            <input placeholder="Capacidad de carga en Toneladas" type="number" class="form-control"
+                                id="capacidadCarga" name="capacidadCarga" required>
                         </div>
                     </div>
                     <div class="row mt-3 text-center">
@@ -124,6 +150,7 @@
     </div>
 
 
+    {% include 'layout/base.html' %}
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -16,7 +16,7 @@
 
 <body>
     <nav class="navbar navbar-expand-custom navbar-mainbg">
-        <a class="navbar-brand navbar-logo" href="#">CyberDevTrans</a>
+        <a class="navbar-brand navbar-logo" href="#">Rutas</a>
         <button class="navbar-toggler" type="button" aria-controls="navbarSupportedContent" aria-expanded="false"
             aria-label="Toggle navigation">
             <i class="fas fa-bars text-white"></i>
@@ -28,25 +28,26 @@
                     <div class="right"></div>
                 </div>
                 <li class="nav-item">
-                    <a class="nav-link " href="{{ url_for('index') }}" target="_blank"><i
+                    <a class="nav-link " href="{{ url_for('index') }}"><i
                             class="fas fa-tachometer-alt"></i>Trailer</a>
                 </li>
                 <li class="nav-item ">
-                    <a class="nav-link" href="{{ url_for('index_clientes') }}" target="_blank"><i
-                            class="far fa-address-book"></i>Clientes
+                    <a class="nav-link" href="{{ url_for('index_clientes') }}"><i
+                            class="fas fa-users"></i>Clientes
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link " href="{{ url_for('index_conductores') }}"><i
-                            class="far fa-clone"></i>Conductores</a>
+                            class="fas fa-user-tie"></i>Conductores</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active text-primary" href="{{ url_for('index_conductores') }}" ><i class="far fa-calendar-alt"></i>Rutas</a>
+                    <a class="nav-link active text-primary" href="{{ url_for('index_rutas') }}"><i class="fas fa-route"></i>Rutas</a>
                 </li>
-
             </ul>
         </div>
     </nav>
+    
+    
     <div class="container mt-5">
         <div class="row">
             <div class="col-12">
@@ -109,6 +110,9 @@
     </div>
     
     
+    {% include 'layout/base.html' %}
+
+
     
 
 

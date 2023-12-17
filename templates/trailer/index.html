@@ -9,13 +9,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <!-- CDN font awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css">
-    <title>CyberDevTrans</title>
+    <title>Trailer</title>
 
 </head>
 
 <body>
     <nav class="navbar navbar-expand-custom navbar-mainbg">
-        <a class="navbar-brand navbar-logo" href="#">Navbar</a>
+        <a class="navbar-brand navbar-logo" href="#">Trailer</a>
         <button class="navbar-toggler" type="button" aria-controls="navbarSupportedContent" aria-expanded="false"
             aria-label="Toggle navigation">
             <i class="fas fa-bars text-white"></i>
@@ -26,31 +26,26 @@
                     <div class="left"></div>
                     <div class="right"></div>
                 </div>
-                <li class="nav-item active">
-                    <a class="nav-link  text-primary" href="{{ url_for('index') }}" ><i
+                <li class="nav-item">
+                    <a class="nav-link active text-primary" href="{{ url_for('index') }}"><i
                             class="fas fa-tachometer-alt"></i>Trailer</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{{ url_for('index_clientes') }}" target="_blank"><i
-                            class="far fa-address-book"></i>Clientes
-                    </a>
+                <li class="nav-item ">
+                    <a class="nav-link text-white" href="{{ url_for('index_clientes') }}"><i
+                            class="fas fa-users"></i>Clientes</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white"  href="{{ url_for('index_conductores') }}"><i
-                            class="far fa-clone"></i>Conductores</a>
-                </li> 
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="javascript:void(0);"><i class="far fa-calendar-alt"></i>Calendar</a>
+                    <a class="nav-link text-white" href="{{ url_for('index_conductores') }}"><i
+                            class="fas fa-user-tie"></i>Conductores</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="javascript:void(0);"><i class="far fa-chart-bar"></i>Charts</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="javascript:void(0);"><i class="far fa-copy"></i>Documents</a>
+                    <a class="nav-link text-white" href="{{ url_for('index_rutas') }}"><i
+                            class="fas fa-route"></i>Rutas</a>
                 </li>
             </ul>
         </div>
     </nav>
+
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-12">
@@ -89,53 +84,56 @@
                             <td>{{ trailer['color'] }}</td>
                             <td>{{ trailer['capacidad_carga'] }}</td>
                             <td>
-                                <a href="{{ url_for('editar_trailer', trailer_id=trailer['_id']) }}" class="btn btn-success">Editar</a>
-                                <a href="{{ url_for('eliminar_trailer', trailer_id=trailer['_id']) }}" class="btn btn-danger">Eliminar</a>
+                                <a href="{{ url_for('editar_trailer', trailer_id=trailer['_id']) }}"
+                                    class="btn btn-success">Editar</a>
+                                <a href="{{ url_for('eliminar_trailer', trailer_id=trailer['_id']) }}"
+                                    class="btn btn-danger">Eliminar</a>
                             </td>
-                            
-                            
-                            
-                            
+
+
+
+
                         </tr>
                         {% endfor %}
                     </tbody>
 
                 </table>
             </div>
+        </div>
+        </div>
+        {% include 'layout/base.html' %}
 
 
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+        <!-- Idioma en Español del data -->
+        <script>
+            $(document).ready(function () {
+                $('#example').DataTable({
+                    "language": {
+                        "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"
+                    },
 
-
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-            <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-            <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-            <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-            <!-- Idioma en Español del data -->
-            <script>
-                $(document).ready(function () {
-                    $('#example').DataTable({
-                        "language": {
-                            "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"
-                        },
-
-                    });
                 });
-            </script>
-            <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                    var alerts = document.querySelectorAll('.alert');
-                    alerts.forEach(function (alert) {
-                        setTimeout(function () {
-                            alert.style.display = 'none';
-                        }, 4000); // duracion de la alerta de 3s
-                    });
+            });
+        </script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                var alerts = document.querySelectorAll('.alert');
+                alerts.forEach(function (alert) {
+                    setTimeout(function () {
+                        alert.style.display = 'none';
+                    }, 4000); // duracion de la alerta de 3s
                 });
-            </script>
+            });
+        </script>
 
-            <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
-            <!--script de bs5 -->
-            <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
+        <!--script de bs5 -->
+        <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script> -->
 
