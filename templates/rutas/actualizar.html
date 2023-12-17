@@ -15,7 +15,7 @@
 
 <body>
     <nav class="navbar navbar-expand-custom navbar-mainbg">
-        <a class="navbar-brand navbar-logo" href="#">Navbar</a>
+        <a class="navbar-brand navbar-logo" href="#">CyberDevTrans</a>
         <button class="navbar-toggler" type="button" aria-controls="navbarSupportedContent" aria-expanded="false"
             aria-label="Toggle navigation">
             <i class="fas fa-bars text-white"></i>
@@ -31,90 +31,118 @@
                             class="fas fa-tachometer-alt"></i>Trailer</a>
                 </li>
                 <li class="nav-item ">
-                    <a class="nav-link " href="javascript:void(0);" target="_blank"><i
+                    <a class="nav-link" href="{{ url_for('index_clientes') }}" target="_blank"><i
                             class="far fa-address-book"></i>Clientes
-                        </a>
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active text-primary" href="javascript:void(0);"><i class="far fa-clone"></i>Components</a>
+                    <a class="nav-link " href="{{ url_for('index_conductores') }}"><i
+                            class="far fa-clone"></i>Conductores</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="javascript:void(0);"><i class="far fa-calendar-alt"></i>Calendar</a>
+                    <a class="nav-link active text-primary" href="{{ url_for('index_conductores') }}" ><i class="far fa-calendar-alt"></i>Rutas</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="javascript:void(0);"><i class="far fa-chart-bar"></i>Charts</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="javascript:void(0);"><i class="far fa-copy"></i>Documents</a>
-                </li>
+
             </ul>
         </div>
     </nav>
     <div class="container mt-5">
         <div class="row">
             <div class="col-12">
-                <h1 class="">Actualizar Conductor</h1>
+                <h1 class="">Actualizar Ruta</h1>
                 <hr>
-                <form method="POST" action="{{ url_for('editar_conductor', conductor_id=conductor['_id']) }}">
-                    <div class="row">
-                        <div class="col-6">
-                            <label for="nombres" class="form-label">Nombres:</label>
-                            <input placeholder="Nombre Apellido" type="text" class="form-control" id="nombres" name="nombres" value="{{ conductor['nombre'] }}" required>
-                        </div>
-                        <div class="col-6">
-                            <label for="cedula" class="form-label">Cédula:</label>
-                            <input placeholder="23XXXXXXX0" type="text" class="form-control" id="cedula" name="cedula" value="{{ conductor['cedula'] }}" required>
-                        </div>
-                    </div>
+                <form method="POST" action="{{ url_for('editar_ruta', ruta_id=ruta['_id']) }}">
                     <div class="row mt-3">
                         <div class="col-6">
-                            <label for="correo" class="form-label">Correo:</label>
-                            <input placeholder="example@gmail.com" type="text" class="form-control" id="correo" name="correo" value="{{ conductor['correo'] }}" required>
-                        </div>
-                        <div class="col-6">
-                            <label for="telefono" class="form-label">Teléfono:</label>
-                            <input placeholder="0999470232" type="text" class="form-control" id="telefono" name="telefono" value="{{ conductor['telefono'] }}" required>
-                        </div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-6">
-                            <label for="nacimiento" class="form-label">Fecha de Nacimiento:</label>
-                            <div class="input-group">
-                                <input type="date" class="form-control" name="nacimiento" id="nacimiento" value="{{ conductor['fecha_nacimiento'] }}">
-                            </div>
-                        </div>
-                        
-                        <div class="col-6">
-                            <label for="genero" class="form-label">Género:</label>
-                            <select class="form-select" name="genero" id="genero">
-                                {% for genero in genero %}
-                                    <option value="{{ genero._id }}" {% if genero._id == conductor['genero_id'] %}selected{% endif %}>{{ genero.nombre }}</option>
+                            <label for="cliente" class="form-label">Cliente:</label>
+                            <select class="form-select" name="cliente" id="cliente" required>
+                                <option value="" disabled selected>Escoge una opción</option>
+                                {% for cliente in clientes %}
+                                    <option value="{{ cliente._id }}" {% if cliente._id == ruta['cliente'] %}selected{% endif %}>{{ cliente.nombres }}</option>
                                 {% endfor %}
                             </select>
                         </div>
-                        
-                    </div>
-                    <div class="row mt-3">
                         <div class="col-6">
-                            <label for="trailer" class="form-label">Trailer:</label>
-                            <select class="form-select" name="trailer" id="trailer">
-                                {% for trailer in trailer %}
-                                    <option value="{{ trailer._id }}" {% if trailer._id == conductor['trailer_id'] %}selected{% endif %}>{{ trailer.matricula }}</option>
+                            <label for="conductor" class="form-label">Conductor Responsable:</label>
+                            <select class="form-select" name="conductor" id="conductor" required>
+                                <option value="" disabled selected>Escoge una opción</option>
+                                {% for conductor in conductores %}
+                                    <option value="{{ conductor._id }}" {% if conductor._id == ruta['conductor_responsable'] %}selected{% endif %}>{{ conductor.nombre }}</option>
                                 {% endfor %}
                             </select>
                         </div>
-                        
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-6">
+                            <label for="provincia_inicio" class="form-label">Provincia de Inicio:</label>
+                            <select class="form-select" name="provincia_inicio" id="provincia_inicio" required>
+                                <option value="" disabled selected>Escoge una opción</option>
+                                {% for provincia_inicio in provincia_inicio %}
+                                    <option value="{{ provincia_inicio._id }}" {% if provincia_inicio._id == ruta['provincia_inicio'] %}selected{% endif %}>{{ provincia_inicio.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label for="provincia_fin" class="form-label">Provincia de Fin:</label>
+                            <select class="form-select" name="provincia_fin" id="provincia_fin" required>
+                                <option value="" disabled selected>Escoge una opción</option>
+                                {% for provincia_fin in provincia_fin %}
+                                    <option value="{{ provincia_fin._id }}" {% if provincia_fin._id == ruta['provincia_fin'] %}selected{% endif %}>{{ provincia_fin.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-6">
+                            <label for="ubicacion_inicio" class="form-label">Ubicación de Inicio:</label>
+                            <input placeholder="Calle 123" type="text" class="form-control" id="ubicacion_inicio" name="ubicacion_inicio" value="{{ ruta['ubicacion_inicio'] }}" required>
+                        </div>
+                        <div class="col-6">
+                            <label for="ubicacion_fin" class="form-label">Ubicación de Fin:</label>
+                            <input placeholder="Calle 123" type="text" class="form-control" id="ubicacion_fin" name="ubicacion_fin" value="{{ ruta['ubicacion_fin'] }}" required>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-6">
+                            <label for="fecha_hora_inicio" class="form-label">Fecha y Hora de Inicio:</label>
+                            <input type="datetime-local" class="form-control" id="fecha_hora_inicio" name="fecha_hora_inicio" value="{{ ruta['hora_inicio'] }}" required>
+                        </div>
+                        <div class="col-6">
+                            <label for="fecha_hora_fin" class="form-label">Fecha y Hora de Fin:</label>
+                            <input type="datetime-local" class="form-control" id="fecha_hora_fin" name="fecha_hora_fin" value="{{ ruta['hora_final'] }}" required>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-6">
+                            <label for="tipo_carga" class="form-label">Tipo de Carga:</label>
+                            <select class="form-select" name="tipo_carga" id="tipo_carga" required>
+                                <option value="" disabled selected>Escoge una opción</option>
+                                {% for tipo_carga in tipos_carga %}
+                                    <option value="{{ tipo_carga._id }}" {% if tipo_carga._id == ruta['tipos_carga'] %}selected{% endif %}>{{ tipo_carga.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label for="categoria_carga" class="form-label">Categoría:</label>
+                            <select class="form-select" name="categoria_carga" id="categoria_carga" required>
+                                <option value="" disabled selected>Escoge una opción</option>
+                                {% for categoria_carga in categorias_carga %}
+                                    <option value="{{ categoria_carga._id }}" {% if categoria_carga._id == ruta['categoria_carga'] %}selected{% endif %}>{{ categoria_carga.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                     </div>
                     <div class="row mt-5">
                         <div class="col-md-12">
-                            <button type="submit" class="btn btn-primary btn-block">Actualizar Conductor</button>
-                            <a href="{{ url_for('index_conductores') }}" class="btn btn-secondary btn-block">Volver al inicio</a>
+                            <button type="submit" class="btn btn-primary btn-block">Actualizar Ruta</button>
+                            <a href="{{ url_for('index_rutas') }}" class="btn btn-secondary btn-block">Volver al inicio</a>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+    
     
     
 

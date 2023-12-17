@@ -15,7 +15,7 @@
 
 <body>
     <nav class="navbar navbar-expand-custom navbar-mainbg">
-        <a class="navbar-brand navbar-logo" href="#">Navbar</a>
+        <a class="navbar-brand navbar-logo" href="#">CyberDevTrans</a>
         <button class="navbar-toggler" type="button" aria-controls="navbarSupportedContent" aria-expanded="false"
             aria-label="Toggle navigation">
             <i class="fas fa-bars text-white"></i>
@@ -31,22 +31,18 @@
                             class="fas fa-tachometer-alt"></i>Trailer</a>
                 </li>
                 <li class="nav-item ">
-                    <a class="nav-link active text-primary" href="javascript:void(0);" target="_blank"><i
+                    <a class="nav-link" href="{{ url_for('index_clientes') }}" target="_blank"><i
                             class="far fa-address-book"></i>Clientes
-                        </a>
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="javascript:void(0);"><i class="far fa-clone"></i>Components</a>
+                    <a class="nav-link " href="{{ url_for('index_conductores') }}"><i
+                            class="far fa-clone"></i>Conductores</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="javascript:void(0);"><i class="far fa-calendar-alt"></i>Calendar</a>
+                    <a class="nav-link active text-primary" href="{{ url_for('index_conductores') }}" ><i class="far fa-calendar-alt"></i>Rutas</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="javascript:void(0);"><i class="far fa-chart-bar"></i>Charts</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="javascript:void(0);"><i class="far fa-copy"></i>Documents</a>
-                </li>
+
             </ul>
         </div>
     </nav>

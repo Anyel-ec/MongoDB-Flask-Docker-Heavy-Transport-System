@@ -16,7 +16,7 @@
 
 <body>
     <nav class="navbar navbar-expand-custom navbar-mainbg">
-        <a class="navbar-brand navbar-logo" href="#">Navbar</a>
+        <a class="navbar-brand navbar-logo" href="#">CyberDevTrans</a>
         <button class="navbar-toggler" type="button" aria-controls="navbarSupportedContent" aria-expanded="false"
             aria-label="Toggle navigation">
             <i class="fas fa-bars text-white"></i>
@@ -28,72 +28,87 @@
                     <div class="right"></div>
                 </div>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('index') }}"><i
+                    <a class="nav-link " href="{{ url_for('index') }}" target="_blank"><i
                             class="fas fa-tachometer-alt"></i>Trailer</a>
                 </li>
                 <li class="nav-item ">
-                    <a class="nav-link " href="javascript:void(0);" target="_blank"><i
-                            class="far fa-address-book"></i>Clientes</a>
+                    <a class="nav-link" href="{{ url_for('index_clientes') }}" target="_blank"><i
+                            class="far fa-address-book"></i>Clientes
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link  active text-primary" href="javascript:void(0);"><i class="far fa-clone"></i>Components</a>
+                    <a class="nav-link " href="{{ url_for('index_conductores') }}"><i
+                            class="far fa-clone"></i>Conductores</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="javascript:void(0);"><i class="far fa-calendar-alt"></i>Calendar</a>
+                    <a class="nav-link active text-primary" href="{{ url_for('index_conductores') }}" ><i class="far fa-calendar-alt"></i>Rutas</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="javascript:void(0);"><i class="far fa-chart-bar"></i>Charts</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="javascript:void(0);"><i class="far fa-copy"></i>Documents</a>
-                </li>
+
             </ul>
         </div>
     </nav>
     <div class="container mt-5">
         <div class="row">
             <div class="col-12">
-                <h3>¿Está seguro que desea borrar este conductor?</h3>
+                <h3>¿Está seguro que desea borrar esta ruta?</h3>
                 <table class="table table-bordered">
                     <tbody>
                         <tr>
-                            <th>Nombres</th>
-                            <td>{{ conductor['nombre'] }}</td>
+                            <th>Cliente</th>
+                            <td>{{ cliente['nombres'] if cliente else 'Desconocido'}}</td>
+
                         </tr>
                         <tr>
-                            <th>Cédula</th>
-                            <td>{{ conductor['cedula'] }}</td>
+                            <th>Conductor Responsable</th>
+                            <td>{{ conductor['nombre'] if conductor else 'Desconocido'}}</td>
+
                         </tr>
                         <tr>
-                            <th>Telefono</th>
-                            <td>{{ conductor['telefono'] }}</td>
+                            <th>Provincia de Inicio</th>
+                            <td>{{ provincia_inicio['nombre'] if provincia_inicio else 'Desconocido'}}</td>
                         </tr>
                         <tr>
-                            <th>Fecha de Nacimiento</th>
-                            <td>{{ conductor['fecha_nacimiento'] }}</td>
+                            <th>Provincia de Fin</th>
+                            <td>{{ provincia_final['nombre'] if provincia_final else 'Desconocido'}}</td>
                         </tr>
                         <tr>
-                            <th>Correo</th>
-                            <td>{{ conductor['correo'] }}</td>
+                            <th>Ubicación de Inicio</th>
+                            <td>{{ ruta['ubicacion_inicio'] }}</td>
                         </tr>
                         <tr>
-                            <th>Genero</th>
-                            <td>{{ genero['nombre'] if genero else 'Desconocido' }}</td>
+                            <th>Ubicación de Fin</th>
+                            <td>{{ ruta['ubicacion_fin'] }}</td>
                         </tr>
                         <tr>
-                            <th>Trailer</th>
-                            <td>{{ trailer['matricula'] if trailer else 'Desconocida' }}</td>
+                            <th>Fecha y Hora de Inicio</th>
+                            <td>{{ ruta['hora_inicio'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Fecha y Hora de Fin</th>
+                            <td>{{ ruta['hora_final'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Tipo de Carga</th>
+                            <td>{{ tipo_carga['nombre'] if tipo_carga else 'Desconocido'}}</td>
+
+                        </tr>
+                        <tr>
+                            <th>Categoría</th>
+                            <td>{{ categoria_carga['nombre'] if categoria_carga else 'Desconocido'}}</td>
+
                         </tr>
                     </tbody>
                 </table>
     
-                <form method="POST">
+                <form method="POST" action="{{ url_for('eliminar_ruta', ruta_id=ruta['_id']) }}">
                     <button type="submit" name="confirm_delete" class="btn btn-danger">Sí, Borrar</button>
-                    <a href="{{ url_for('index_conductores') }}" class="btn btn-secondary">Cancelar</a>
+                    <a href="{{ url_for('index_rutas') }}" class="btn btn-secondary">Cancelar</a>
                 </form>
             </div>
         </div>
     </div>
+    
+    
     
 
 

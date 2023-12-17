@@ -293,3 +293,38 @@ class DataManager:
         }
         self.mongo.db.rutas.insert_one(nueva_ruta)
 
+    def edit_ruta_by_id(self, ruta_id, cliente_id, conductor_id, provincia_inicio_id, hora_inicio, ubicacion_inicio, provincia_fin_id, hora_fin, ubicacion_fin, tipo_carga_id, categoria_carga_id):
+            self.mongo.db.rutas.update_one(
+                {'_id': ObjectId(ruta_id)},
+                {'$set': {
+                    'cliente': ObjectId(cliente_id),
+                    'conductor_responsable': ObjectId(conductor_id),
+                    'provincia_inicio': provincia_inicio_id,
+                    'hora_inicio': datetime.strptime(hora_inicio, '%Y-%m-%dT%H:%M'),
+                    'ubicacion_inicio': ubicacion_inicio,
+                    'provincia_fin': provincia_fin_id,
+                    'hora_final': datetime.strptime(hora_fin, '%Y-%m-%dT%H:%M'),
+                    'ubicacion_fin': ubicacion_fin,
+                    'tipos_carga': tipo_carga_id,
+                    'categoria_carga': categoria_carga_id
+                }}
+            )
+
+    def delete_ruta(self, ruta_id):
+        ruta = self.mongo.db.rutas.find_one(
+            {'_id': ObjectId(ruta_id)})
+
+        if ruta:
+            cliente = self.mongo.db.clientes.find_one(
+                {'_id': ruta['cliente']})
+            conductor = self.mongo.db.conductores.find_one(
+                {'_id': ruta['conductor_responsable']})
+        else:
+            cliente = None
+            conductor = None
+
+        if ruta:
+            self.mongo.db.rutas.delete_one({'_id': ObjectId(ruta_id)})
+
+        return ruta, cliente, conductor
+
