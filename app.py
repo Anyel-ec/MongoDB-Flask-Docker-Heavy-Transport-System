@@ -114,18 +114,6 @@ def eliminar_ruta(ruta_id):
     return delete_ruta(ruta_id, mongo, data_manager)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 # Ruta de ejemplo para probar la conexión
 @app.route('/test_mongo_connection')
 def test_mongo_connection():
