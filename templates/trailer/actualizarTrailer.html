@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.14.0/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.14.0/dist/sweetalert2.min.js"></script>
     <title>Actualizar Trailer</title>   
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/logo.png') }}" type="image/x-icon">
 
 
     <script>
@@ -20,12 +21,12 @@
             var capacidadCarga = document.getElementById('capacidadCarga').value;
 
             // Validación de la matrícula
-            var matriculaRegex = /^[A-Z]{3}-\d{3}$/;
+            var matriculaRegex = /^[aA-Zz]{3}-\d{4}$/;
             if (!matriculaRegex.test(matricula)) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'La matrícula debe tener el formato ABC-123 (3 letras mayúsculas, guion medio y 3 números).'
+                    text: 'La matrícula debe tener el formato ABC-1234 (3 letras mayúsculas, guion medio y 4 números).'
                 });
                 return false;
             }
@@ -48,7 +49,7 @@
 
 <body>
     <nav class="navbar navbar-expand-custom navbar-mainbg">
-        <a class="navbar-brand navbar-logo" href="#">Trailer</a>
+        <a class="navbar-brand navbar-logo" href="#">CyberDev</a>
         <button class="navbar-toggler" type="button" aria-controls="navbarSupportedContent" aria-expanded="false"
             aria-label="Toggle navigation">
             <i class="fas fa-bars text-white"></i>
@@ -82,12 +83,22 @@
         <div class="row">
             <div class="col-12">
                 <h1 class="">Actualizar Trailer</h1>
+                <!-- Flash Alerta-->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
                 <hr>
                 <form method="POST" action="{{ url_for('editar_trailer', trailer_id=trailer['_id']) }}" onsubmit="return validarFormulario()">
                     <div class="row">
                         <div class="col-6">
                             <label for="matricula" class="form-label">Matricula</label>
-                            <input placeholder="ABC-123" type="text" class="form-control" id="matricula" name="matricula" value="{{ trailer['matricula'] }}">
+                            <input maxlength="8" placeholder="ABC-123" type="text" class="form-control" id="matricula" name="matricula" value="{{ trailer['matricula'] }}">
                         </div>
                         <div class="col-6">
                             <label for="ejes" class="form-label">Ejes</label>
@@ -112,7 +123,8 @@
                         </div>
                         <div class="col-6">
                             <label for="modelo" class="form-label">Modelo</label>
-                            <input type="text" class="form-control" id="modelo" name="modelo" value="{{ trailer['modelo'] }}" required>
+                            <input type="text" maxlength="50"
+                             class="form-control" id="modelo" name="modelo" value="{{ trailer['modelo'] }}" required>
                         </div>
                     </div>
                     <div class="row mt-3">
@@ -126,7 +138,8 @@
                         </div>
                         <div class="col-6">
                             <label for="capacidadCarga" class="form-label">Capacidad de Carga</label>
-                            <input placeholder="Capacidad de carga en Toneladas" type="number" class="form-control" id="capacidadCarga" name="capacidadCarga" value="{{ trailer['capacidad_carga'] }}" required>
+                            <input placeholder="Capacidad de carga en Toneladas" type="number" min="0" max="100" class="form-control"
+                             id="capacidadCarga" name="capacidadCarga" value="{{ trailer['capacidad_carga'] }}" required>
                         </div>
                     </div>
                     <div class="row mt-5">

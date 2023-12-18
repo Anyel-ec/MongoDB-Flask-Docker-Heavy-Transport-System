@@ -14,6 +14,7 @@ load_dotenv()
 
 app = Flask(__name__)
 
+
 # Cargar variables de entorno desde el archivo .env
 app.secret_key = os.getenv('SECRET_KEY')
 app.config['MONGO_URI'] = os.getenv('MONGO_URI')
@@ -57,7 +58,7 @@ def formulario_agregar_cliente():
 
 @app.route('/cliente/agregar', methods=['POST'])
 def agregar_cliente():
-    return add_cliente(data_manager)
+    return add_cliente(request, data_manager)
     
 
 @app.route('/cliente/editar/<string:cliente_id>', methods=['GET', 'POST'])
@@ -80,7 +81,7 @@ def formulario_agregar_conductor():
 
 @app.route('/conductor/agregar', methods=['POST'])
 def agregar_conductor():
-    return add_conductor(data_manager)
+    return add_conductor(request, data_manager)
     
 @app.route('/conductor/editar/<string:conductor_id>', methods=['GET', 'POST'])
 def editar_conductor(conductor_id):

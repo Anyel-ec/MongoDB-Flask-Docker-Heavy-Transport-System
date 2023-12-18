@@ -10,12 +10,42 @@
     <!-- CDN font awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css">
     <title>Agregar Conductor</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/logo.png') }}" type="image/x-icon">
 
+    <script>
+        function validarFormulario() {
+            var matricula = document.getElementById('matricula').value;
+            var capacidadCarga = document.getElementById('capacidadCarga').value;
+
+            // Validación de la matrícula
+            var matriculaRegex = /^[aA-Zz]{3}-\d{4}$/;
+            if (!matriculaRegex.test(matricula)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'La matrícula debe tener el formato ABC-1234 (3 letras mayúsculas, guion medio y 4 números).'
+                });
+                return false;
+            }
+
+            // Validación de la capacidad de carga
+            if (isNaN(capacidadCarga) || capacidadCarga <= 0 || capacidadCarga > 100) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'La capacidad de carga debe ser un número positivo y estar entre 1 y 100.'
+                });
+                return false;
+            }
+
+            return true; // Envía el formulario si todas las validaciones son exitosas
+        }
+    </script>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-custom navbar-mainbg">
-        <a class="navbar-brand navbar-logo" href="#">Rutas</a>
+        <a class="navbar-brand navbar-logo" href="#">CyberDev</a>
         <button class="navbar-toggler" type="button" aria-controls="navbarSupportedContent" aria-expanded="false"
             aria-label="Toggle navigation">
             <i class="fas fa-bars text-white"></i>
@@ -51,6 +81,16 @@
         <div class="row">
             <div class="col-12">
                 <h1 class="">Agregar Rutas</h1>
+                                <!-- Flash Alerta-->
+                                {% with messages = get_flashed_messages(with_categories=true) %}
+                                {% if messages %}
+                                {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}">
+                                    {{ message }}
+                                </div>
+                                {% endfor %}
+                                {% endif %}
+                                {% endwith %}
                 <hr>
                 <form method="POST" action="{{ url_for('agregar_ruta') }}">
                     <div class="row mt-3">
@@ -96,10 +136,12 @@
                     <div class="row mt-3">
                         <div class="col-6">
                             <label for="ubicacion_inicio" class="form-label">Ubicación de Inicio: </label>
-                            <input placeholder="Calle 123" type="text" class="form-control" id="ubicacion_inicio" name="ubicacion_inicio" required>
+                            <input placeholder="Calle 123" maxlength="50"
+                             type="text" class="form-control" id="ubicacion_inicio" name="ubicacion_inicio" required>
                         </div><div class="col-6">
                             <label for="ubicacion_fin" class="form-label">Ubicación de Fin: </label>
-                            <input placeholder="Calle 123" type="text" class="form-control" id="ubicacion_fin" name="ubicacion_fin" required>
+                            <input placeholder="Calle 123" maxlength="50"
+                             type="text" class="form-control" id="ubicacion_fin" name="ubicacion_fin" required>
                         </div>                 
                     </div>
                     <div class="row mt-3">
@@ -110,6 +152,8 @@
                         <div class="col-6">
                             <label for="fecha_hora_fin" class="form-label">Fecha y Hora de Fin:</label>
                             <input type="datetime-local" class="form-control" id="fecha_hora_fin" name="fecha_hora_fin" required>
+                            <small id="fechaError" class="text-danger"></small>
+
                         </div>
                     </div>
                     
@@ -136,7 +180,7 @@
                     
                     <div class="row mt-3">
                         <div class="col-md-12">
-                            <button type="submit" class="btn btn-primary btn-block">Agregar Ruta</button>
+                            <button type="submit"  onclick="return validarFechas();" class="btn btn-primary btn-block" id="boton-enviar">Agregar Ruta</button>
                             <a href="{{ url_for('index_rutas') }}" class="btn btn-secondary btn-block ">Volver al inicio</a>
                         </div>
                         <div class="col-md-6">
@@ -174,7 +218,34 @@
 
 
 
-
+    <script>
+        document.getElementById('fecha_hora_inicio').addEventListener('change', function () {
+            validarFechas();
+        });
+    
+        document.getElementById('fecha_hora_fin').addEventListener('change', function () {
+            validarFechas();
+        });
+    
+        function validarFechas() {
+            var fechaInicio = new Date(document.getElementById('fecha_hora_inicio').value);
+            var fechaFin = new Date(document.getElementById('fecha_hora_fin').value);
+            var smallFechaError = document.getElementById('fechaError');
+            var botonEnviar = document.getElementById('boton-enviar');
+    
+            if (fechaFin < fechaInicio) {
+                smallFechaError.textContent = 'La fecha y hora de fin no puede ser menor que la fecha y hora de inicio';
+                // Deshabilitar el botón de envío
+                botonEnviar.disabled = true;
+            } else {
+                smallFechaError.textContent = ''; // Limpiar el mensaje de error
+                // Habilitar el botón de envío
+                botonEnviar.disabled = false;
+            }
+        }
+    </script>
+    
+    
 
 
 

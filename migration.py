@@ -8,7 +8,6 @@ def migrar_datos():
     # Cargar variables de entorno desde el archivo .env
     load_dotenv()
 
-    # Obtener la URI de MongoDB y la clave secreta desde las variables de entorno
     mongo_uri = os.getenv('MONGO_URI')
     secret_key = os.getenv('SECRET_KEY')
 
@@ -55,7 +54,8 @@ def migrar_datos():
         {"_id": 7, "nombre": "Rosa"},
         {"_id": 8, "nombre": "Gris"},
         {"_id": 9, "nombre": "Blanco"},
-        {"_id": 10, "nombre": "Negro"}
+        {"_id": 10, "nombre": "Negro"}, 
+        {"_id": 12, "nombre": "Negro Bien negro"}
     ]
 
     # Colección en MongoDB para colores

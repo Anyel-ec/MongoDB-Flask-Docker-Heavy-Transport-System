@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,13 +10,43 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.14.0/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.14.0/dist/sweetalert2.min.js"></script>
-    <title>Actualizar Trailer</title>    
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/logo.png') }}" type="image/x-icon">
 
+    <title>Actualizar Trailer</title>    
+    <script>
+        function validarFormulario() {
+            var matricula = document.getElementById('matricula').value;
+            var capacidadCarga = document.getElementById('capacidadCarga').value;
+
+            // Validación de la matrícula
+            var matriculaRegex = /^[aA-Zz]{3}-\d{4}$/;
+            if (!matriculaRegex.test(matricula)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'La matrícula debe tener el formato ABC-1234 (3 letras mayúsculas, guion medio y 4 números).'
+                });
+                return false;
+            }
+
+            // Validación de la capacidad de carga
+            if (isNaN(capacidadCarga) || capacidadCarga <= 0 || capacidadCarga > 100) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'La capacidad de carga debe ser un número positivo y estar entre 1 y 100.'
+                });
+                return false;
+            }
+
+            return true; // Envía el formulario si todas las validaciones son exitosas
+        }
+    </script>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-custom navbar-mainbg">
-        <a class="navbar-brand navbar-logo" href="#">Clientes</a>
+        <a class="navbar-brand navbar-logo" href="#">CyberDev</a>
         <button class="navbar-toggler" type="button" aria-controls="navbarSupportedContent" aria-expanded="false"
             aria-label="Toggle navigation">
             <i class="fas fa-bars text-white"></i>
@@ -52,26 +81,40 @@
         <div class="row">
             <div class="col-12">
                 <h1 class="">Actualizar Cliente</h1>
+                                <!-- Flash Alerta-->
+                                {% with messages = get_flashed_messages(with_categories=true) %}
+                                {% if messages %}
+                                {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}">
+                                    {{ message }}
+                                </div>
+                                {% endfor %}
+                                {% endif %}
+                                {% endwith %}
                 <hr>
                 <form method="POST" action="{{ url_for('editar_cliente', cliente_id=cliente['_id']) }}" onsubmit="return validarFormulario()">
                     <div class="row">
                         <div class="col-6">
                             <label for="nombres" class="form-label">Nombres:</label>
-                            <input placeholder="Nombre Apellido" type="text" class="form-control" id="nombres" name="nombres" value="{{ cliente['nombres'] }}" required>
+                            <input maxlength="25" 
+                            placeholder="Nombre Apellido" type="text" class="form-control" id="nombres" name="nombres" value="{{ cliente['nombres'] }}" required>
                         </div>
                         <div class="col-6">
                             <label for="cedula" class="form-label">Cédula:</label>
-                            <input placeholder="23XXXXXXX0" type="text" class="form-control" id="cedula" name="cedula" value="{{ cliente['cedula'] }}" required>
+                            <input maxlength="10" 
+                            placeholder="23XXXXXXX0" type="text" class="form-control" id="cedula" name="cedula" value="{{ cliente['cedula'] }}" required>
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-6">
                             <label for="correo" class="form-label">Correo:</label>
-                            <input placeholder="example@gmail.com" type="text" class="form-control" id="correo" name="correo" value="{{ cliente['correo'] }}" required>
+                            <input maxlength="50"
+                             placeholder="example@gmail.com" type="text" class="form-control" id="correo" name="correo" value="{{ cliente['correo'] }}" required>
                         </div>
                         <div class="col-6">
                             <label for="direccion" class="form-label">Dirección:</label>
-                            <input placeholder="Calle 123" type="text" class="form-control" id="direccion" name="direccion" value="{{ cliente['direccion'] }}" required>
+                            <input maxlength="50"
+                            placeholder="Calle 123" type="text" class="form-control" id="direccion" name="direccion" value="{{ cliente['direccion'] }}" required>
                         </div>
                     </div>
                     <div class="row mt-3">
@@ -94,7 +137,7 @@
                     </div>
                     <div class="row mt-5">
                         <div class="col-md-12">
-                            <button type="submit" class="btn btn-primary btn-block">Actualizar Cliente</button>
+                            <button type="submit" class="btn btn-primary btn-block" onclick="return validarCedula()" >Actualizar Cliente</button>
                             <a href="{{ url_for('index_clientes') }}" class="btn btn-secondary btn-block">Volver al inicio</a>
                         </div>
                     </div>
@@ -162,7 +205,88 @@
         return true; // Envía el formulario si todas las validaciones son exitosas
     }
     </script>
+<script>
+    function validarCedula() {
+        var cedula = document.getElementById('cedula').value;
 
+        // Preguntamos si la cedula consta de 10 digitos
+        if (cedula.length == 10) {
+
+            // Obtenemos el digito de la region que son los dos primeros digitos
+            var digito_region = cedula.substring(0, 2);
+
+            // Preguntamos si la region existe; Ecuador se divide en 24 regiones
+            if (digito_region >= 1 && digito_region <= 24) {
+
+                // Extraemos el último digito
+                var ultimo_digito = cedula.substring(9, 10);
+
+                // Agrupamos todos los pares y los sumamos
+                var pares = parseInt(cedula.substring(1, 2)) + parseInt(cedula.substring(3, 4)) + parseInt(cedula.substring(5, 6)) + parseInt(cedula.substring(7, 8));
+
+                // Agrupamos los impares, los multiplicamos por un factor de 2, si la resultante es > que 9 le restamos el 9 a la resultante
+                var numero1 = cedula.substring(0, 1);
+                var numero1 = (numero1 * 2);
+                if (numero1 > 9) { var numero1 = (numero1 - 9); }
+
+                var numero3 = cedula.substring(2, 3);
+                var numero3 = (numero3 * 2);
+                if (numero3 > 9) { var numero3 = (numero3 - 9); }
+
+                var numero5 = cedula.substring(4, 5);
+                var numero5 = (numero5 * 2);
+                if (numero5 > 9) { var numero5 = (numero5 - 9); }
+
+                var numero7 = cedula.substring(6, 7);
+                var numero7 = (numero7 * 2);
+                if (numero7 > 9) { var numero7 = (numero7 - 9); }
+
+                var numero9 = cedula.substring(8, 9);
+                var numero9 = (numero9 * 2);
+                if (numero9 > 9) { var numero9 = (numero9 - 9); }
+
+                var impares = numero1 + numero3 + numero5 + numero7 + numero9;
+
+                // Suma total
+                var suma_total = (pares + impares);
+
+                // Extraemos el primer digito
+                var primer_digito_suma = String(suma_total).substring(0, 1);
+
+                // Obtenemos la decena inmediata
+                var decena = (parseInt(primer_digito_suma) + 1) * 10;
+
+                // Obtenemos la resta de la decena inmediata - la suma_total, esto nos da el digito validador
+                var digito_validador = decena - suma_total;
+
+                // Si el digito validador es igual a 10, toma el valor de 0
+                if (digito_validador == 10) {
+                    digito_validador = 0;
+                }
+
+                // Validamos que el digito validador sea igual al de la cedula
+                if (digito_validador == ultimo_digito) {
+                    //alert('La cédula ' + cedula + ' es correcta');
+                } else {
+                    alert('La cédula ' + cedula + ' es incorrecta');
+                    return false; // No se enviará el formulario
+                }
+
+            } else {
+                // Mostramos una alerta si la región no pertenece
+                alert('Esta cédula no pertenece a ninguna región');
+                return false; // No se enviará el formulario
+            }
+        } else {
+            // Mostramos una alerta si la cédula tiene menos o más de 10 dígitos
+            alert('Esta cédula tiene menos de 10 dígitos');
+            return false; // No se enviará el formulario
+        }
+
+        // El formulario se enviará solo si la cédula es correcta
+        return true;
+    }
+</script>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <!--script de bs5 -->
     <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>

@@ -13,7 +13,7 @@ def conductor_form(mongo):
     trailer = mongo.db.trailer.find()
     return render_template('conductores/agregar.html', trailer=trailer, genero=genero)
 
-def add_conductor(data_manager):
+def add_conductor(request, data_manager):
     if request.method == 'POST':
         nombres = request.form.get('nombres')
         cedula = request.form.get('cedula')
@@ -22,12 +22,21 @@ def add_conductor(data_manager):
         correo = request.form.get('correo')
         genero_id = int(request.form.get('genero'))
         trailer_id = request.form.get('trailer') 
-        data_manager.add_conductor(nombres, cedula, telefono, fecha_nacimiento, correo, genero_id, trailer_id)
-        flash('Conductor agregado correctamente', 'success')
-        return redirect(url_for('index_conductores'))
+
+        # Verificar si la cédula ya existe en la colección de conductores
+        if data_manager.conductor_exists(cedula):
+            flash('Ya existe un conductor con esa cédula', 'danger')
+            return redirect(url_for('formulario_agregar_conductor'))
+        else:
+            data_manager.add_conductor(nombres, cedula, telefono, fecha_nacimiento, correo, genero_id, trailer_id)
+            flash('Conductor agregado correctamente', 'success')
+            return redirect(url_for('index_conductores'))
+    
+    return redirect(url_for('index_conductores'))
 
 def update_conductor(mongo, conductor_id, data_manager):
     conductor = mongo.db.conductores.find_one({'_id': ObjectId(conductor_id)})
+
     if request.method == 'POST':
         # Obtén los datos actualizados del formulario y actualiza el conductor
         nuevo_nombres = request.form.get('nombres')
@@ -37,6 +46,11 @@ def update_conductor(mongo, conductor_id, data_manager):
         nuevo_correo = request.form.get('correo')
         nuevo_genero_id = int(request.form.get('genero'))
         nuevo_trailer_id = request.form.get('trailer')
+
+        # Verificar si la nueva cédula ya existe en otro conductor
+        if nueva_cedula != conductor['cedula'] and data_manager.conductor_exists(nueva_cedula):
+            flash('Ya existe un conductor con esa cédula', 'danger')
+            return redirect(url_for('editar_conductor', conductor_id=conductor_id))
 
         data_manager.edit_conductor_by_id(conductor_id, nuevo_nombres, nueva_cedula, nuevo_telefono, nueva_fecha_nacimiento, nuevo_correo, nuevo_genero_id, nuevo_trailer_id)
         flash('Conductor actualizado correctamente', 'success')

@@ -13,7 +13,7 @@ def cliente_form(mongo):
     provincias = mongo.db.provincias.find()
     return render_template('clientes/agregarCliente.html', provincias=provincias, genero=genero)
 
-def add_cliente(data_manager):
+def add_cliente(request, data_manager):
     if request.method == 'POST':
         nombres = request.form.get('nombres')
         cedula = request.form.get('cedula')
@@ -22,23 +22,38 @@ def add_cliente(data_manager):
         provincia_id = int(request.form.get('provincia'))
         genero_id = int(request.form.get('genero'))
 
-        data_manager.add_cliente(nombres, cedula, correo, direccion, provincia_id, genero_id)
+        # Verificar si la cédula ya existe en la colección
+        if data_manager.cliente_exists(cedula):
+            flash('Ya existe un cliente con esa cédula', 'danger')
+            return redirect(url_for('formulario_agregar_cliente'))
+        else:
+            data_manager.add_cliente(nombres, cedula, correo, direccion, provincia_id, genero_id)
 
-        flash('Cliente agregado correctamente', 'success')
-        return redirect(url_for('index_clientes'))
+            flash('Cliente agregado correctamente', 'success')
+            return redirect(url_for('index_clientes'))
+    
+    return redirect(url_for('index_clientes'))
+
     
 def update_cliente(mongo, cliente_id, data_manager):
     cliente = mongo.db.clientes.find_one({'_id': ObjectId(cliente_id)})
 
     if request.method == 'POST':
-        # Obtén los datos actualizados del formulario y actualiza el cliente
+        # Obtén los datos actualizados del formulario
         nuevo_nombres = request.form.get('nombres')
         nueva_cedula = request.form.get('cedula')
+
+        # Verificar si la nueva cédula ya existe en otro cliente
+        if nueva_cedula != cliente['cedula'] and data_manager.cliente_exists(nueva_cedula):
+            flash('Ya existe un cliente con esa cédula', 'danger')
+            return redirect(url_for('editar_cliente', cliente_id=cliente_id))
+
         nuevo_correo = request.form.get('correo')
         nueva_direccion = request.form.get('direccion')
         nueva_provincia_id = int(request.form.get('provincia'))
         nuevo_genero_id = int(request.form.get('genero'))
 
+        # Actualizar el cliente
         data_manager.edit_cliente_by_id(cliente_id, nuevo_nombres, nueva_cedula, nuevo_correo, nueva_direccion, nueva_provincia_id, nuevo_genero_id)
         flash('Cliente actualizado correctamente', 'success')
         return redirect(url_for('index_clientes'))

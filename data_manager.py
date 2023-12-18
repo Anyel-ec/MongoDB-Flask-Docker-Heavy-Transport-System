@@ -43,6 +43,10 @@ class DataManager:
         }
         self.mongo.db.trailer.insert_one(nuevo_trailer)
 
+    def trailer_exists(self, matricula):
+            existing_trailer = self.mongo.db.trailer.find_one({'matricula': matricula})
+            return existing_trailer is not None
+    
     def edit_trailer_by_id(self, trailer_id, nueva_matricula, nuevo_modelo, nuevo_color_id, nueva_capacidad_carga, nuevo_marca_id, nuevo_ejes_id):
         self.mongo.db.trailer.update_one(
             {'_id': ObjectId(trailer_id)},
@@ -112,6 +116,11 @@ class DataManager:
 
         self.mongo.db.clientes.insert_one(nuevo_cliente)
 
+    def cliente_exists(self, cedula):
+        existing_cliente = self.mongo.db.clientes.find_one({'cedula': cedula})
+        return existing_cliente is not None
+
+    
     def edit_cliente_by_id(self, cliente_id, nuevo_nombres, nueva_cedula, nuevo_correo, nueva_direccion, nueva_provincia_id, nuevo_genero_id):
         self.mongo.db.clientes.update_one(
             {'_id': ObjectId(cliente_id)},
@@ -184,6 +193,10 @@ class DataManager:
             'trailer_id': ObjectId(trailer_id)
         }
         self.mongo.db.conductores.insert_one(nuevo_conductor)
+
+    def conductor_exists(self, cedula):
+        existing_conductor = self.mongo.db.conductores.find_one({'cedula': cedula})
+        return existing_conductor is not None
 
     def edit_conductor_by_id(self, conductor_id, nuevo_nombres, nueva_cedula, nuevo_telefono, nueva_fecha_nacimiento, nuevo_correo, nuevo_genero_id, nuevo_trailer_id):
         self.mongo.db.conductores.update_one(

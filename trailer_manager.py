@@ -18,27 +18,47 @@ def trailer_form(mongo):
 def add_trailer(request, data_manager):
     if request.method == 'POST':
         matricula = request.form.get('matricula')
-        Ejes = int(request.form.get('Ejes'))
-        marca_id = int(request.form.get('marca'))
-        modelo = request.form.get('modelo')
-        color_id = int(request.form.get('color'))
-        capacidad_carga = int(request.form.get('capacidadCarga'))
 
-        data_manager.add_trailer(matricula, Ejes, marca_id, modelo, color_id, capacidad_carga)
+        # Convertir la matrícula a mayúsculas
+        matricula = matricula.upper()
 
-        flash('Trailer agregado correctamente', 'success')
-        return redirect(url_for('index'))
+        # Verificar si la matrícula ya existe en la colección
+        if data_manager.trailer_exists(matricula):
+            flash('Ya existe un trailer con esa matrícula', 'danger')
+            return redirect(url_for('formulario_agregar_trailer'))
+        else:
+            Ejes = int(request.form.get('Ejes'))
+            marca_id = int(request.form.get('marca'))
+            modelo = request.form.get('modelo')
+            color_id = int(request.form.get('color'))
+            capacidad_carga = int(request.form.get('capacidadCarga'))
+
+            # Intentar agregar el trailer
+            if data_manager.add_trailer(matricula, Ejes, marca_id, modelo, color_id, capacidad_carga):
+                flash('Error al agregar el trailer', 'danger')
+            else:
+                flash('Trailer agregado correctamente', 'success')
+
+    # Redirigir al índice solo si el trailer se agregó correctamente
+    return redirect(url_for('index'))
+
     
 def update_trailer(mongo, data_manager, trailer_id):
     trailer = mongo.db.trailer.find_one({'_id': ObjectId(trailer_id)})
-
     if request.method == 'POST':
         nueva_matricula = request.form.get('matricula')
+
+        # Verificar si la nueva matrícula ya existe en otro trailer
+        if nueva_matricula != trailer['matricula'] and data_manager.trailer_exists(nueva_matricula):
+            flash('Ya existe un trailer con esa matrícula', 'danger')
+            return redirect(url_for('editar_trailer', trailer_id=trailer_id))
+
         nuevo_modelo = request.form.get('modelo')
         nuevo_color_id = int(request.form.get('color'))
         nueva_capacidad_carga = int(request.form.get('capacidadCarga'))
         nuevo_marca_id = int(request.form.get('marca'))
         nuevo_ejes_id = int(request.form.get('Ejes'))
+        
         data_manager.edit_trailer_by_id(trailer_id, nueva_matricula, nuevo_modelo, nuevo_color_id, nueva_capacidad_carga, nuevo_marca_id, nuevo_ejes_id)
         flash('Trailer actualizado correctamente', 'success')
         return redirect(url_for('index'))
