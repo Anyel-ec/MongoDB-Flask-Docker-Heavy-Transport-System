@@ -55,7 +55,6 @@ def migrar_datos():
         {"_id": 8, "nombre": "Gris"},
         {"_id": 9, "nombre": "Blanco"},
         {"_id": 10, "nombre": "Negro"}, 
-        {"_id": 12, "nombre": "Negro Bien negro"}
     ]
 
     # Colección en MongoDB para colores
