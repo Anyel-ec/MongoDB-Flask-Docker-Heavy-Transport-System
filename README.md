@@ -77,7 +77,7 @@ services:
     ```
 
 2. Access the application at [http://localhost:5000](http://localhost:5000).
-
+3. Access in Local Machine `mongosh mongodb://localhost:27020/transporte`
 ### Main Functionalities
 
 - **Trailer:**

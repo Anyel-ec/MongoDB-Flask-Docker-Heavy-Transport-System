@@ -13,35 +13,6 @@
     <script src="{{ url_for('static', filename='js/sweetalert2@10.js') }}"></script>
     <link rel="shortcut icon" href="{{ url_for('static', filename='img/logo.png') }}" type="image/x-icon">
 
-    <script>
-        function validarFormulario() {
-            var matricula = document.getElementById('matricula').value;
-            var capacidadCarga = document.getElementById('capacidadCarga').value;
-
-            // Validación de la matrícula
-            var matriculaRegex = /^[aA-Zz]{3}-\d{4}$/;
-            if (!matriculaRegex.test(matricula)) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'La matrícula debe tener el formato ABC-1234 (3 letras mayúsculas, guion medio y 4 números).'
-                });
-                return false;
-            }
-
-            // Validación de la capacidad de carga
-            if (isNaN(capacidadCarga) || capacidadCarga <= 0 || capacidadCarga > 100) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'La capacidad de carga debe ser un número positivo y estar entre 1 y 100.'
-                });
-                return false;
-            }
-
-            return true; // Envía el formulario si todas las validaciones son exitosas
-        }
-    </script>
 </head>
 
 <body>
@@ -180,7 +151,7 @@
             var correo = document.getElementById('correo').value;
 
             // Validación de nombres
-            var nombresRegex = /^[a-zA-Z\s]+$/;
+            var nombresRegex = /^[a-zA-Z\sáéíóúüñÁÉÍÓÚÜÑ]+$/;
             if (!nombresRegex.test(nombres)) {
                 Swal.fire({
                     icon: 'error',
@@ -214,10 +185,34 @@
 
             return true; // Envía el formulario si todas las validaciones son exitosas
         }
-    </script>
 
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-    <script>
+        function validarFormulario() {
+            var matricula = document.getElementById('matricula').value;
+            var capacidadCarga = document.getElementById('capacidadCarga').value;
+
+            // Validación de la matrícula
+            var matriculaRegex = /^[aA-Zz]{3}-\d{4}$/;
+            if (!matriculaRegex.test(matricula)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'La matrícula debe tener el formato ABC-1234 (3 letras mayúsculas, guion medio y 4 números).'
+                });
+                return false;
+            }
+
+            // Validación de la capacidad de carga
+            if (isNaN(capacidadCarga) || capacidadCarga <= 0 || capacidadCarga > 100) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'La capacidad de carga debe ser un número positivo y estar entre 1 y 100.'
+                });
+                return false;
+            }
+
+            return true; // Envía el formulario si todas las validaciones son exitosas
+        }
         function validarCedula() {
             var cedula = document.getElementById('cedula').value;
     
@@ -299,17 +294,9 @@
             return true;
         }
     </script>
-    
 
-
-
-
-
-
-
-
-
-
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  
     <!--script de bs5 -->
     <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
