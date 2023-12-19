@@ -155,7 +155,7 @@
             var capacidadCarga = document.getElementById('capacidadCarga').value;
 
             // Validación de la matrícula
-            var matriculaRegex = /^[aA-Zz]{3}-\d{4}$/;
+            var matriculaRegex = /^[a-zA-Z]{3}-\d{4}$/;
             if (!matriculaRegex.test(matricula)) {
                 Swal.fire({
                     icon: 'error',

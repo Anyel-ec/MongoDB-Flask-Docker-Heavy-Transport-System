@@ -9,6 +9,7 @@ from clientes_manager import clientes_home, cliente_form, add_cliente, update_cl
 from conductores_manager import conductores_home, conductor_form, add_conductor, update_conductor, delete_conductor
 from rutas_manager import rutas_home, rutas_form, add_ruta, update_ruta, delete_ruta
 from migration import migrar_datos
+
 #Cargar variables de entorno desde el archivo .env
 load_dotenv()
 
