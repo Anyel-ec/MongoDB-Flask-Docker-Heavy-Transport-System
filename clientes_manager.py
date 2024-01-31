@@ -13,6 +13,7 @@ def cliente_form(mongo):
     provincias = mongo.db.provincias.find()
     return render_template('clientes/agregarCliente.html', provincias=provincias, genero=genero)
 
+# Cliente Manager - add_cliente
 def add_cliente(request, data_manager):
     if request.method == 'POST':
         nombres = request.form.get('nombres')
@@ -22,17 +23,19 @@ def add_cliente(request, data_manager):
         provincia_id = int(request.form.get('provincia'))
         genero_id = int(request.form.get('genero'))
 
-        # Verificar si la cédula ya existe en la colección
-        if data_manager.cliente_exists(cedula):
-            flash('Ya existe un cliente con esa cédula', 'danger')
-            return redirect(url_for('formulario_agregar_cliente'))
-        else:
-            data_manager.add_cliente(nombres, cedula, correo, direccion, provincia_id, genero_id)
+        # Obtener el mensaje desde el DataManager
+        mensaje = data_manager.add_cliente(nombres, cedula, correo, direccion, provincia_id, genero_id)
 
-            flash('Cliente agregado correctamente', 'success')
+        # Flash el mensaje
+        if 'Error' in mensaje:
+                    flash(mensaje, 'danger')
+                    return redirect(url_for('formulario_agregar_cliente'))
+        else:
+            flash(mensaje, 'success')
             return redirect(url_for('index_clientes'))
-    
+
     return redirect(url_for('index_clientes'))
+
 
     
 def update_cliente(mongo, cliente_id, data_manager):
