@@ -23,21 +23,18 @@ def add_trailer(request, data_manager):
         matricula = matricula.upper()
 
         # Verificar si la matrícula ya existe en la colección
-        if data_manager.trailer_exists(matricula):
-            flash('Ya existe un trailer con esa matrícula', 'danger')
+        mensaje = data_manager.add_trailer(matricula, 
+                                           int(request.form.get('Ejes')),
+                                           int(request.form.get('marca')),
+                                           request.form.get('modelo'),
+                                           int(request.form.get('color')),
+                                           int(request.form.get('capacidadCarga')))
+
+        if 'Error' in mensaje:
+            flash(mensaje, 'danger')
             return redirect(url_for('formulario_agregar_trailer'))
         else:
-            Ejes = int(request.form.get('Ejes'))
-            marca_id = int(request.form.get('marca'))
-            modelo = request.form.get('modelo')
-            color_id = int(request.form.get('color'))
-            capacidad_carga = int(request.form.get('capacidadCarga'))
-
-            # Intentar agregar el trailer
-            if data_manager.add_trailer(matricula, Ejes, marca_id, modelo, color_id, capacidad_carga):
-                flash('Error al agregar el trailer', 'danger')
-            else:
-                flash('Trailer agregado correctamente', 'success')
+            flash(mensaje, 'success')
 
     # Redirigir al índice solo si el trailer se agregó correctamente
     return redirect(url_for('index'))
