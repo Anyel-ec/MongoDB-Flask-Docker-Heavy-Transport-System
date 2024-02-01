@@ -93,7 +93,6 @@ class DataManager:
         return trailer, marca, color
 #########################################################################################################################
     # CLIENTES
-
     def get_clientes(self):
         clientes = self.mongo.db.clientes.find({'eliminado': False})
         generos = {genero['_id']: genero['nombre'] for genero in self.mongo.db.genero.find()}
@@ -118,6 +117,8 @@ class DataManager:
 
         return clientes_con_datos
 
+
+        # DataManager - add_cliente
     def add_cliente(self, nombres, cedula, correo, direccion, provincia_id, genero_id):
         existing_cliente = self.mongo.db.clientes.find_one({'cedula': cedula})
 
@@ -147,6 +148,7 @@ class DataManager:
             self.mongo.db.clientes.insert_one(nuevo_cliente)
             return 'Cliente agregado correctamente'
 
+
     def cliente_exists(self, cedula):
         existing_cliente = self.mongo.db.clientes.find_one({'cedula': cedula})
         return existing_cliente is not None
@@ -165,6 +167,7 @@ class DataManager:
             }}
         )
 
+    # DataManager - delete_cliente
     def delete_cliente(self, cliente_id):
         cliente = self.mongo.db.clientes.find_one({'_id': ObjectId(cliente_id)})
 
