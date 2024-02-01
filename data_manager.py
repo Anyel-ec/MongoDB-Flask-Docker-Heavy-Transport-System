@@ -348,22 +348,70 @@ class DataManager:
         }
         self.mongo.db.rutas.insert_one(nueva_ruta)
 
+    # Añade esta función en tu clase que maneja las rutas
+    def guardar_ruta_editada(self, ruta_id, valores_anteriores, valores_nuevos):
+        ruta_editada_data = {
+            'ruta_id': ruta_id,
+            'valores_anteriores': valores_anteriores,
+            'valores_nuevos': valores_nuevos,
+            'fecha_edicion': datetime.utcnow()
+        }
+        self.mongo.db.rutas_edited.insert_one(ruta_editada_data)
+
+    # Modifica tu función edit_ruta_by_id para incluir el trigger
     def edit_ruta_by_id(self, ruta_id, cliente_id, conductor_id, provincia_inicio_id, hora_inicio, ubicacion_inicio, provincia_fin_id, hora_fin, ubicacion_fin, tipo_carga_id, categoria_carga_id):
-            self.mongo.db.rutas.update_one(
-                {'_id': ObjectId(ruta_id)},
-                {'$set': {
-                    'cliente': ObjectId(cliente_id),
-                    'conductor_responsable': ObjectId(conductor_id),
-                    'provincia_inicio': provincia_inicio_id,
-                    'hora_inicio': datetime.strptime(hora_inicio, '%Y-%m-%dT%H:%M'),
-                    'ubicacion_inicio': ubicacion_inicio,
-                    'provincia_fin': provincia_fin_id,
-                    'hora_final': datetime.strptime(hora_fin, '%Y-%m-%dT%H:%M'),
-                    'ubicacion_fin': ubicacion_fin,
-                    'tipos_carga': tipo_carga_id,
-                    'categoria_carga': categoria_carga_id
-                }}
-            )
+        # Obtener valores anteriores antes de realizar la actualización
+        ruta_anterior = self.mongo.db.rutas.find_one({'_id': ObjectId(ruta_id)})
+
+        valores_anteriores = {
+            'cliente': str(ruta_anterior.get('cliente')),
+            'conductor_responsable': str(ruta_anterior.get('conductor_responsable')),
+            'provincia_inicio': str(ruta_anterior.get('provincia_inicio')),
+            'hora_inicio': str(ruta_anterior.get('hora_inicio')),
+            'ubicacion_inicio': str(ruta_anterior.get('ubicacion_inicio')),
+            'provincia_fin': str(ruta_anterior.get('provincia_fin')),
+            'hora_final': str(ruta_anterior.get('hora_final')),
+            'ubicacion_fin': str(ruta_anterior.get('ubicacion_fin')),
+            'tipos_carga': str(ruta_anterior.get('tipos_carga')),
+            'categoria_carga': str(ruta_anterior.get('categoria_carga'))
+        }
+
+        # Realizar la actualización
+        self.mongo.db.rutas.update_one(
+            {'_id': ObjectId(ruta_id)},
+            {'$set': {
+                'cliente': ObjectId(cliente_id),
+                'conductor_responsable': ObjectId(conductor_id),
+                'provincia_inicio': provincia_inicio_id,
+                'hora_inicio': datetime.strptime(hora_inicio, '%Y-%m-%dT%H:%M'),
+                'ubicacion_inicio': ubicacion_inicio,
+                'provincia_fin': provincia_fin_id,
+                'hora_final': datetime.strptime(hora_fin, '%Y-%m-%dT%H:%M'),
+                'ubicacion_fin': ubicacion_fin,
+                'tipos_carga': tipo_carga_id,
+                'categoria_carga': categoria_carga_id
+            }}
+        )
+
+        # Obtener los nuevos valores después de la actualización
+        ruta_nueva = self.mongo.db.rutas.find_one({'_id': ObjectId(ruta_id)})
+
+        valores_nuevos = {
+            'cliente': str(ruta_nueva.get('cliente')),
+            'conductor_responsable': str(ruta_nueva.get('conductor_responsable')),
+            'provincia_inicio': str(ruta_nueva.get('provincia_inicio')),
+            'hora_inicio': str(ruta_nueva.get('hora_inicio')),
+            'ubicacion_inicio': str(ruta_nueva.get('ubicacion_inicio')),
+            'provincia_fin': str(ruta_nueva.get('provincia_fin')),
+            'hora_final': str(ruta_nueva.get('hora_final')),
+            'ubicacion_fin': str(ruta_nueva.get('ubicacion_fin')),
+            'tipos_carga': str(ruta_nueva.get('tipos_carga')),
+            'categoria_carga': str(ruta_nueva.get('categoria_carga'))
+        }
+
+        # Llamar a la función para guardar la edición
+        self.guardar_ruta_editada(ruta_id, valores_anteriores, valores_nuevos)
+
 
     def delete_ruta(self, ruta_id):
         ruta = self.mongo.db.rutas.find_one({'_id': ObjectId(ruta_id)})
