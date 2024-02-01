@@ -13,6 +13,7 @@ def conductor_form(mongo):
     trailer = mongo.db.trailer.find()
     return render_template('conductores/agregar.html', trailer=trailer, genero=genero)
 
+# Conductor Manager
 def add_conductor(request, data_manager):
     if request.method == 'POST':
         nombres = request.form.get('nombres')
@@ -24,15 +25,17 @@ def add_conductor(request, data_manager):
         trailer_id = request.form.get('trailer') 
 
         # Verificar si la cédula ya existe en la colección de conductores
-        if data_manager.conductor_exists(cedula):
-            flash('Ya existe un conductor con esa cédula', 'danger')
+        mensaje = data_manager.add_conductor(nombres, cedula, telefono, fecha_nacimiento, correo, genero_id, trailer_id)
+
+        if 'Error' in mensaje:
+            flash(mensaje, 'danger')
             return redirect(url_for('formulario_agregar_conductor'))
         else:
-            data_manager.add_conductor(nombres, cedula, telefono, fecha_nacimiento, correo, genero_id, trailer_id)
-            flash('Conductor agregado correctamente', 'success')
-            return redirect(url_for('index_conductores'))
-    
+            flash(mensaje, 'success')
+
+    # Redirigir al índice solo si el conductor se agregó o actualizó correctamente
     return redirect(url_for('index_conductores'))
+
 
 def update_conductor(mongo, conductor_id, data_manager):
     conductor = mongo.db.conductores.find_one({'_id': ObjectId(conductor_id)})

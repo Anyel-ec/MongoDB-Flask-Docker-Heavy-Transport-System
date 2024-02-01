@@ -6,13 +6,11 @@ from datetime import datetime
 class DataManager:
     def __init__(self, mongo):
         self.mongo = mongo
-
     def get_trailers(self):
-        trailers = self.mongo.db.trailer.find()
-        colores = {color['_id']: color['nombre']
-                   for color in self.mongo.db.colores.find()}
-        marcas = {marca['_id']: marca['nombre']
-                  for marca in self.mongo.db.marcas.find()}
+        # Filtrar los trailers eliminados (eliminado=False)
+        trailers = self.mongo.db.trailer.find({'eliminado': False})
+        colores = {color['_id']: color['nombre'] for color in self.mongo.db.colores.find()}
+        marcas = {marca['_id']: marca['nombre'] for marca in self.mongo.db.marcas.find()}
         trailers_con_colores = []
 
         for trailer in trailers:
@@ -31,18 +29,36 @@ class DataManager:
             }
             trailers_con_colores.append(trailer_con_color)
         return trailers_con_colores
-
+    
     def add_trailer(self, matricula, Ejes, marca_id, modelo, color_id, capacidad_carga):
-        nuevo_trailer = {
-            'matricula': matricula,
-            'Ejes': Ejes,
-            'marca_id': marca_id,
-            'modelo': modelo,
-            'color_id': color_id,
-            'capacidad_carga': capacidad_carga
-        }
-        self.mongo.db.trailer.insert_one(nuevo_trailer)
+        existing_trailer = self.mongo.db.trailer.find_one({'matricula': matricula})
 
+        if existing_trailer:
+            self.mongo.db.trailer.update_one(
+                {'_id': existing_trailer['_id']},
+                {'$set': {
+                    'Ejes': Ejes,
+                    'marca_id': marca_id,
+                    'modelo': modelo,
+                    'color_id': color_id,
+                    'capacidad_carga': capacidad_carga,
+                    'eliminado': False
+                }}
+            )
+            return 'Trailer actualizado correctamente'
+        else:
+            nuevo_trailer = {
+                'matricula': matricula,
+                'Ejes': Ejes,
+                'marca_id': marca_id,
+                'modelo': modelo,
+                'color_id': color_id,
+                'capacidad_carga': capacidad_carga,
+                'eliminado': False
+            }
+            self.mongo.db.trailer.insert_one(nuevo_trailer)
+            return 'Trailer agregado correctamente'
+    
     def trailer_exists(self, matricula):
             existing_trailer = self.mongo.db.trailer.find_one({'matricula': matricula})
             return existing_trailer is not None
@@ -65,32 +81,30 @@ class DataManager:
 
         if trailer:
             marca = self.mongo.db.marcas.find_one({'_id': trailer['marca_id']})
-            color = self.mongo.db.colores.find_one(
-                {'_id': trailer['color_id']})
+            color = self.mongo.db.colores.find_one({'_id': trailer['color_id']})
         else:
             marca = None
             color = None
 
         if trailer:
-            self.mongo.db.trailer.delete_one({'_id': ObjectId(trailer_id)})
-
+            # Actualizar el campo "eliminado" en lugar de eliminar físicamente
+            self.mongo.db.trailer.update_one({'_id': ObjectId(trailer_id)},
+                                             {'$set': {'eliminado': True}})
         return trailer, marca, color
 #########################################################################################################################
     # CLIENTES
+
     def get_clientes(self):
-        clientes = self.mongo.db.clientes.find()
-        generos = {genero['_id']: genero['nombre']
-                   for genero in self.mongo.db.genero.find()}
-        provincias = {provincia['_id']: provincia['nombre']
-                      for provincia in self.mongo.db.provincias.find()}
+        clientes = self.mongo.db.clientes.find({'eliminado': False})
+        generos = {genero['_id']: genero['nombre'] for genero in self.mongo.db.genero.find()}
+        provincias = {provincia['_id']: provincia['nombre'] for provincia in self.mongo.db.provincias.find()}
         clientes_con_datos = []
 
         for cliente in clientes:
             genero_id = cliente.get('genero_id')
             genero_nombre = generos.get(genero_id, 'Género Desconocido')
             provincia_id = cliente.get('provincia_id')
-            provincia_nombre = provincias.get(
-                provincia_id, 'Provincia Desconocida')
+            provincia_nombre = provincias.get(provincia_id, 'Provincia Desconocida')
             cliente_con_datos = {
                 '_id': str(cliente['_id']),
                 'nombres': cliente['nombres'],
@@ -105,22 +119,38 @@ class DataManager:
         return clientes_con_datos
 
     def add_cliente(self, nombres, cedula, correo, direccion, provincia_id, genero_id):
-        nuevo_cliente = {
-            'nombres': nombres,
-            'cedula': cedula,
-            'correo': correo,
-            'direccion': direccion,
-            'provincia_id': provincia_id,
-            'genero_id': genero_id,
-        }
+        existing_cliente = self.mongo.db.clientes.find_one({'cedula': cedula})
 
-        self.mongo.db.clientes.insert_one(nuevo_cliente)
+        if existing_cliente:
+            self.mongo.db.clientes.update_one(
+                {'_id': existing_cliente['_id']},
+                {'$set': {
+                    'nombres': nombres,
+                    'correo': correo,
+                    'direccion': direccion,
+                    'provincia_id': provincia_id,
+                    'genero_id': genero_id,
+                    'eliminado': False
+                }}
+            )
+            return 'Cliente actualizado correctamente'
+        else:
+            nuevo_cliente = {
+                'nombres': nombres,
+                'cedula': cedula,
+                'correo': correo,
+                'direccion': direccion,
+                'provincia_id': provincia_id,
+                'genero_id': genero_id,
+                'eliminado': False
+            }
+            self.mongo.db.clientes.insert_one(nuevo_cliente)
+            return 'Cliente agregado correctamente'
 
     def cliente_exists(self, cedula):
         existing_cliente = self.mongo.db.clientes.find_one({'cedula': cedula})
         return existing_cliente is not None
 
-    
     def edit_cliente_by_id(self, cliente_id, nuevo_nombres, nueva_cedula, nuevo_correo, nueva_direccion, nueva_provincia_id, nuevo_genero_id):
         self.mongo.db.clientes.update_one(
             {'_id': ObjectId(cliente_id)},
@@ -130,35 +160,32 @@ class DataManager:
                 'correo': nuevo_correo,
                 'direccion': nueva_direccion,
                 'provincia_id': nueva_provincia_id,
-                'genero_id': nuevo_genero_id
+                'genero_id': nuevo_genero_id,
+                'eliminado': False
             }}
         )
 
     def delete_cliente(self, cliente_id):
-        cliente = self.mongo.db.clientes.find_one(
-            {'_id': ObjectId(cliente_id)})
+        cliente = self.mongo.db.clientes.find_one({'_id': ObjectId(cliente_id)})
 
         if cliente:
-            provincia = self.mongo.db.provincias.find_one(
-                {'_id': cliente['provincia_id']})
-            genero = self.mongo.db.genero.find_one(
-                {'_id': cliente['genero_id']})
+            provincia = self.mongo.db.provincias.find_one({'_id': cliente['provincia_id']})
+            genero = self.mongo.db.genero.find_one({'_id': cliente['genero_id']})
         else:
             provincia = None
             genero = None
 
         if cliente:
-            self.mongo.db.clientes.delete_one({'_id': ObjectId(cliente_id)})
+            self.mongo.db.clientes.update_one({'_id': ObjectId(cliente_id)}, {'$set': {'eliminado': True}})
 
         return cliente, provincia, genero
+
 #########################################################################################################################
     # CONDUCTORES
     def get_conductores(self):
-        conductores = self.mongo.db.conductores.find()
-        generos = {genero['_id']: genero['nombre']
-                for genero in self.mongo.db.genero.find()}
-        trailers = {trailer['_id']: trailer['matricula']
-                    for trailer in self.mongo.db.trailer.find()}
+        conductores = self.mongo.db.conductores.find({'eliminado': False})
+        generos = {genero['_id']: genero['nombre'] for genero in self.mongo.db.genero.find()}
+        trailers = {trailer['_id']: trailer['matricula'] for trailer in self.mongo.db.trailer.find()}
         conductores_con_info = []
 
         for conductor in conductores:
@@ -183,16 +210,40 @@ class DataManager:
         return conductores_con_info
 
     def add_conductor(self, nombres, cedula, telefono, fecha_nacimiento, correo, genero_id, trailer_id):
-        nuevo_conductor = {
-            'nombre': nombres,
-            'cedula': cedula,
-            'telefono': telefono,
-            'fecha_nacimiento': fecha_nacimiento,
-            'correo': correo,
-            'genero_id': genero_id,
-            'trailer_id': ObjectId(trailer_id)
-        }
-        self.mongo.db.conductores.insert_one(nuevo_conductor)
+        # Buscar si ya existe un conductor con la misma cédula
+        existing_conductor = self.mongo.db.conductores.find_one({'cedula': cedula})
+
+        if existing_conductor:
+            # Si existe, actualizar los valores y establecer eliminado en False
+            self.mongo.db.conductores.update_one(
+                {'_id': existing_conductor['_id']},
+                {'$set': {
+                    'nombre': nombres,
+                    'telefono': telefono,
+                    'fecha_nacimiento': fecha_nacimiento,
+                    'correo': correo,
+                    'genero_id': genero_id,
+                    'trailer_id': ObjectId(trailer_id),
+                    'eliminado': False
+                }}
+            )
+            return 'Conductor actualizado correctamente'
+        else:
+            # Si no existe, agregar un nuevo conductor
+            nuevo_conductor = {
+                'nombre': nombres,
+                'cedula': cedula,
+                'telefono': telefono,
+                'fecha_nacimiento': fecha_nacimiento,
+                'correo': correo,
+                'genero_id': genero_id,
+                'trailer_id': ObjectId(trailer_id),
+                'eliminado': False
+            }
+            self.mongo.db.conductores.insert_one(nuevo_conductor)
+            return 'Conductor agregado correctamente'
+
+
 
     def conductor_exists(self, cedula):
         existing_conductor = self.mongo.db.conductores.find_one({'cedula': cedula})
@@ -208,7 +259,8 @@ class DataManager:
                 'fecha_nacimiento': nueva_fecha_nacimiento,
                 'correo': nuevo_correo,
                 'genero_id': nuevo_genero_id,
-                'trailer_id': ObjectId(nuevo_trailer_id)
+                'trailer_id': ObjectId(nuevo_trailer_id),
+                'eliminado': False  # Establecer eliminado en False al editar
             }}
         )
         
@@ -226,8 +278,9 @@ class DataManager:
             trailer = None
 
         if conductor:
-            self.mongo.db.conductores.delete_one({'_id': ObjectId(conductor_id)})
-
+            # Actualizar eliminado a True en lugar de eliminar físicamente
+            self.mongo.db.conductores.update_one({'_id': ObjectId(conductor_id)},
+                                                 {'$set': {'eliminado': True}})
         return conductor, genero, trailer
     
 #########################################################################################################################
@@ -306,38 +359,102 @@ class DataManager:
         }
         self.mongo.db.rutas.insert_one(nueva_ruta)
 
+    # Añade esta función en tu clase que maneja las rutas
+    def guardar_ruta_editada(self, ruta_id, valores_anteriores, valores_nuevos):
+        ruta_editada_data = {
+            'ruta_id': ruta_id,
+            'valores_anteriores': valores_anteriores,
+            'valores_nuevos': valores_nuevos,
+            'fecha_edicion': datetime.utcnow()
+        }
+        self.mongo.db.rutas_edited.insert_one(ruta_editada_data)
+
+    # Modifica tu función edit_ruta_by_id para incluir el trigger
     def edit_ruta_by_id(self, ruta_id, cliente_id, conductor_id, provincia_inicio_id, hora_inicio, ubicacion_inicio, provincia_fin_id, hora_fin, ubicacion_fin, tipo_carga_id, categoria_carga_id):
-            self.mongo.db.rutas.update_one(
-                {'_id': ObjectId(ruta_id)},
-                {'$set': {
-                    'cliente': ObjectId(cliente_id),
-                    'conductor_responsable': ObjectId(conductor_id),
-                    'provincia_inicio': provincia_inicio_id,
-                    'hora_inicio': datetime.strptime(hora_inicio, '%Y-%m-%dT%H:%M'),
-                    'ubicacion_inicio': ubicacion_inicio,
-                    'provincia_fin': provincia_fin_id,
-                    'hora_final': datetime.strptime(hora_fin, '%Y-%m-%dT%H:%M'),
-                    'ubicacion_fin': ubicacion_fin,
-                    'tipos_carga': tipo_carga_id,
-                    'categoria_carga': categoria_carga_id
-                }}
-            )
+        # Obtener valores anteriores antes de realizar la actualización
+        ruta_anterior = self.mongo.db.rutas.find_one({'_id': ObjectId(ruta_id)})
+
+        valores_anteriores = {
+            'cliente': str(ruta_anterior.get('cliente')),
+            'conductor_responsable': str(ruta_anterior.get('conductor_responsable')),
+            'provincia_inicio': str(ruta_anterior.get('provincia_inicio')),
+            'hora_inicio': str(ruta_anterior.get('hora_inicio')),
+            'ubicacion_inicio': str(ruta_anterior.get('ubicacion_inicio')),
+            'provincia_fin': str(ruta_anterior.get('provincia_fin')),
+            'hora_final': str(ruta_anterior.get('hora_final')),
+            'ubicacion_fin': str(ruta_anterior.get('ubicacion_fin')),
+            'tipos_carga': str(ruta_anterior.get('tipos_carga')),
+            'categoria_carga': str(ruta_anterior.get('categoria_carga'))
+        }
+
+        # Realizar la actualización
+        self.mongo.db.rutas.update_one(
+            {'_id': ObjectId(ruta_id)},
+            {'$set': {
+                'cliente': ObjectId(cliente_id),
+                'conductor_responsable': ObjectId(conductor_id),
+                'provincia_inicio': provincia_inicio_id,
+                'hora_inicio': datetime.strptime(hora_inicio, '%Y-%m-%dT%H:%M'),
+                'ubicacion_inicio': ubicacion_inicio,
+                'provincia_fin': provincia_fin_id,
+                'hora_final': datetime.strptime(hora_fin, '%Y-%m-%dT%H:%M'),
+                'ubicacion_fin': ubicacion_fin,
+                'tipos_carga': tipo_carga_id,
+                'categoria_carga': categoria_carga_id
+            }}
+        )
+
+        # Obtener los nuevos valores después de la actualización
+        ruta_nueva = self.mongo.db.rutas.find_one({'_id': ObjectId(ruta_id)})
+
+        valores_nuevos = {
+            'cliente': str(ruta_nueva.get('cliente')),
+            'conductor_responsable': str(ruta_nueva.get('conductor_responsable')),
+            'provincia_inicio': str(ruta_nueva.get('provincia_inicio')),
+            'hora_inicio': str(ruta_nueva.get('hora_inicio')),
+            'ubicacion_inicio': str(ruta_nueva.get('ubicacion_inicio')),
+            'provincia_fin': str(ruta_nueva.get('provincia_fin')),
+            'hora_final': str(ruta_nueva.get('hora_final')),
+            'ubicacion_fin': str(ruta_nueva.get('ubicacion_fin')),
+            'tipos_carga': str(ruta_nueva.get('tipos_carga')),
+            'categoria_carga': str(ruta_nueva.get('categoria_carga'))
+        }
+
+        # Llamar a la función para guardar la edición
+        self.guardar_ruta_editada(ruta_id, valores_anteriores, valores_nuevos)
+
 
     def delete_ruta(self, ruta_id):
-        ruta = self.mongo.db.rutas.find_one(
-            {'_id': ObjectId(ruta_id)})
+        ruta = self.mongo.db.rutas.find_one({'_id': ObjectId(ruta_id)})
 
         if ruta:
-            cliente = self.mongo.db.clientes.find_one(
-                {'_id': ruta['cliente']})
-            conductor = self.mongo.db.conductores.find_one(
-                {'_id': ruta['conductor_responsable']})
+            cliente = self.mongo.db.clientes.find_one({'_id': ruta['cliente']})
+            conductor = self.mongo.db.conductores.find_one({'_id': ruta['conductor_responsable']})
         else:
             cliente = None
             conductor = None
 
         if ruta:
+            # Almacenar la fecha de eliminación y los datos de la ruta eliminada
+            deleted_ruta_data = {
+                'ruta_id': ruta['_id'],
+                'cliente_id': str(cliente['_id']) if cliente else 'Desconocido',
+                'conductor_id': str(conductor['_id']) if conductor else 'Desconocido',
+                'provincia_inicio': ruta['provincia_inicio'],
+                'hora_inicio': ruta['hora_inicio'],
+                'ubicacion_inicio': ruta['ubicacion_inicio'],
+                'provincia_fin': ruta['provincia_fin'],
+                'hora_final': ruta['hora_final'],
+                'ubicacion_fin': ruta['ubicacion_fin'],
+                'tipos_carga': ruta['tipos_carga'],
+                'categoria_carga': ruta['categoria_carga'],
+                'fecha_eliminacion': datetime.utcnow()
+            }
+
+            # Insertar los datos de la ruta eliminada en la colección rutas_deleted
+            self.mongo.db.rutas_deleted.insert_one(deleted_ruta_data)
+
+            # Eliminar la ruta de la colección principal
             self.mongo.db.rutas.delete_one({'_id': ObjectId(ruta_id)})
 
         return ruta, cliente, conductor
-
