@@ -1,0 +1,52 @@
+<estado_vias_ecuador>
+  <regiones>
+    <region>
+      <nombre>Costa</nombre>
+      <provincias>
+        <provincia>
+          <nombre>Guayas</nombre>
+          <condiciones_vias>
+            <condicion>
+              <tipo>Carretera</tipo>
+              <tramo>Km 10 - Km 50</tramo>
+              <estado>Bueno</estado>
+              <obras_pendientes>Sí</obras_pendientes>
+            </condicion>
+          </condiciones_vias>
+        </provincia>
+      </provincias>
+    </region>
+	<region>
+      <nombre>Sierra</nombre>
+      <provincias>
+        <provincia>
+          <nombre>Azuay</nombre>
+          <condiciones_vias>
+            <condicion>
+              <tipo>Autopista</tipo>
+              <tramo>Km 20 - Km 60</tramo>
+              <estado>Regular</estado>
+              <obras_pendientes>No</obras_pendientes>
+            </condicion>
+          </condiciones_vias>
+        </provincia>
+      </provincias>
+    </region>
+    <region>
+      <nombre>Amazonía</nombre>
+      <provincias>
+        <provincia>
+          <nombre>Sucumbíos</nombre>
+          <condiciones_vias>
+            <condicion>
+              <tipo>Carretera</tipo>
+              <tramo>Km 5 - Km 30</tramo>
+              <estado>Bueno</estado>
+              <obras_pendientes>No</obras_pendientes>
+            </condicion>
+          </condiciones_vias>
+        </provincia>
+      </provincias>
+    </region>
+  </regiones>
+</estado_vias_ecuador>

@@ -1,0 +1,122 @@
+[
+  {
+    "ubicacion": "Autopista Central",
+    "tipo": "Mantenimiento preventivo",
+    "inicio": "2024-05-01",
+    "fin": "2024-05-15"
+  },
+  {
+    "ubicacion": "Autopista Norte",
+    "tipo": "Mantenimiento correctivo",
+    "inicio": "2024-05-02",
+    "fin": "2024-05-18"
+  },
+  {
+    "ubicacion": "Carretera Este",
+    "tipo": "Mantenimiento preventivo",
+    "inicio": "2024-05-03",
+    "fin": "2024-05-16"
+  },
+  {
+    "ubicacion": "Ruta 66",
+    "tipo": "Mantenimiento correctivo",
+    "inicio": "2024-05-04",
+    "fin": "2024-05-20"
+  },
+  {
+    "ubicacion": "Avenida Principal",
+    "tipo": "Mantenimiento preventivo",
+    "inicio": "2024-05-05",
+    "fin": "2024-05-21"
+  },
+  {
+    "ubicacion": "Calle Secundaria",
+    "tipo": "Mantenimiento correctivo",
+    "inicio": "2024-05-06",
+    "fin": "2024-05-22"
+  },
+  {
+    "ubicacion": "Viaducto Metropolitano",
+    "tipo": "Mantenimiento preventivo",
+    "inicio": "2024-05-07",
+    "fin": "2024-05-23"
+  },
+  {
+    "ubicacion": "Circunvalación",
+    "tipo": "Mantenimiento correctivo",
+    "inicio": "2024-05-08",
+    "fin": "2024-05-24"
+  },
+  {
+    "ubicacion": "Boulevard Oeste",
+    "tipo": "Mantenimiento preventivo",
+    "inicio": "2024-05-09",
+    "fin": "2024-05-25"
+  },
+  {
+    "ubicacion": "Carril Exclusivo",
+    "tipo": "Mantenimiento correctivo",
+    "inicio": "2024-05-10",
+    "fin": "2024-05-26"
+  },
+  {
+    "ubicacion": "Tramo Residencial",
+    "tipo": "Mantenimiento preventivo",
+    "inicio": "2024-05-11",
+    "fin": "2024-05-27"
+  },
+  {
+    "ubicacion": "Vía Expresa",
+    "tipo": "Mantenimiento correctivo",
+    "inicio": "2024-05-12",
+    "fin": "2024-05-28"
+  },
+  {
+    "ubicacion": "Pasaje Comercial",
+    "tipo": "Mantenimiento preventivo",
+    "inicio": "2024-05-13",
+    "fin": "2024-05-29"
+  },
+  {
+    "ubicacion": "Ramal Industrial",
+    "tipo": "Mantenimiento correctivo",
+    "inicio": "2024-05-14",
+    "fin": "2024-05-30"
+  },
+  {
+    "ubicacion": "Paseo Marítimo",
+    "tipo": "Mantenimiento preventivo",
+    "inicio": "2024-05-15",
+    "fin": "2024-05-31"
+  },
+  {
+    "ubicacion": "Carretera de Montaña",
+    "tipo": "Mantenimiento correctivo",
+    "inicio": "2024-05-16",
+    "fin": "2024-06-01"
+  },
+  {
+    "ubicacion": "Cruce Ferroviario",
+    "tipo": "Mantenimiento preventivo",
+    "inicio": "2024-05-17",
+    "fin": "2024-06-02"
+  },
+  {
+    "ubicacion": "Sendero Ecológico",
+    "tipo": "Mantenimiento correctivo",
+    "inicio": "2024-05-18",
+    "fin": "2024-06-03"
+  },
+  {
+    "ubicacion": "Camino Rural",
+    "tipo": "Mantenimiento preventivo",
+    "inicio": "2024-05-19",
+    "fin": "2024-06-04"
+  },
+  {
+    "ubicacion": "Anillo Periférico",
+    "tipo": "Mantenimiento correctivo",
+    "inicio": "2024-05-20",
+    "fin": "2024-06-05"
+  }
+]

@@ -291,6 +291,7 @@ class DataManager:
     
     def get_rutas(self):
         rutas = self.mongo.db.rutas.find()
+        
         clientes = {str(cliente['_id']): cliente['nombres']
                     for cliente in self.mongo.db.clientes.find()}
         conductores = {str(conductor['_id']): conductor['nombre']
@@ -302,9 +303,20 @@ class DataManager:
         categorias_carga = {str(categoria['_id']): categoria['nombre']
                             for categoria in self.mongo.db.categoria_carga.find()}
 
+        consumo = {str(consumo['_id']): consumo['nombre']
+                            for consumo in self.mongo.db.consumo.find()}
+        precio = {str(precio['_id']): precio['nombre']
+                            for precio in self.mongo.db.precio.find()}  
+        paradas = {str(paradas['_id']): paradas['nombre']
+                            for paradas in self.mongo.db.paradas.find()}
+        
         rutas_con_info = []
 
         for ruta in rutas:
+
+            consumo = ruta.get('consumo')
+            precio = ruta.get('precio')
+            paradas = ruta.get('paradas')
             cliente_id = str(ruta.get('cliente'))
             cliente_nombre = clientes.get(cliente_id, 'Cliente Desconocido')
 
@@ -338,7 +350,11 @@ class DataManager:
                 'hora_fin': ruta.get('hora_final', 'Hora Desconocida'),
                 'ubicacion_fin': ubicacion_fin,
                 'tipo_carga': tipo_carga_nombre,
-                'categoria_carga': categoria_carga_nombre
+                'categoria_carga': categoria_carga_nombre, 
+                'consumo': consumo,
+                'precio': precio,
+                'paradas': paradas
+                
             }
 
             rutas_con_info.append(ruta_con_info)
@@ -347,7 +363,7 @@ class DataManager:
 
 
 
-    def add_ruta(self, cliente_id, conductor_id, provincia_inicio_id, hora_inicio, ubicacion_inicio, provincia_fin_id, hora_fin, ubicacion_fin, tipo_carga_id, categoria_carga_id):
+    def add_ruta(self, cliente_id, conductor_id, provincia_inicio_id, hora_inicio, ubicacion_inicio, provincia_fin_id, hora_fin, ubicacion_fin, tipo_carga_id, categoria_carga_id, consumo, precio, paradas):
         nueva_ruta = {
             'cliente': ObjectId(cliente_id),
             'conductor_responsable': ObjectId(conductor_id),
@@ -358,7 +374,11 @@ class DataManager:
             'hora_final': datetime.strptime(hora_fin, '%Y-%m-%dT%H:%M'),
             'ubicacion_fin': ubicacion_fin,
             'tipos_carga': (tipo_carga_id),
-            'categoria_carga': (categoria_carga_id)
+            'categoria_carga': (categoria_carga_id),
+            'consumo': (consumo),
+            'precio': (precio),
+            'paradas': (paradas)
+
         }
         self.mongo.db.rutas.insert_one(nueva_ruta)
 
@@ -373,7 +393,7 @@ class DataManager:
         self.mongo.db.rutas_edited.insert_one(ruta_editada_data)
 
     # Modifica tu función edit_ruta_by_id para incluir el trigger
-    def edit_ruta_by_id(self, ruta_id, cliente_id, conductor_id, provincia_inicio_id, hora_inicio, ubicacion_inicio, provincia_fin_id, hora_fin, ubicacion_fin, tipo_carga_id, categoria_carga_id):
+    def edit_ruta_by_id(self, ruta_id, cliente_id, conductor_id, provincia_inicio_id, hora_inicio, ubicacion_inicio, provincia_fin_id, hora_fin, ubicacion_fin, tipo_carga_id, categoria_carga_id, consumo, precio, paradas):
         # Obtener valores anteriores antes de realizar la actualización
         ruta_anterior = self.mongo.db.rutas.find_one({'_id': ObjectId(ruta_id)})
 
@@ -387,7 +407,10 @@ class DataManager:
             'hora_final': str(ruta_anterior.get('hora_final')),
             'ubicacion_fin': str(ruta_anterior.get('ubicacion_fin')),
             'tipos_carga': str(ruta_anterior.get('tipos_carga')),
-            'categoria_carga': str(ruta_anterior.get('categoria_carga'))
+            'categoria_carga': str(ruta_anterior.get('categoria_carga')),
+            'consumo': str(ruta_anterior.get('consumo')),
+            'precio': str(ruta_anterior.get('precio')),
+            'paradas': str(ruta_anterior.get('paradas'))
         }
 
         # Realizar la actualización
@@ -403,7 +426,10 @@ class DataManager:
                 'hora_final': datetime.strptime(hora_fin, '%Y-%m-%dT%H:%M'),
                 'ubicacion_fin': ubicacion_fin,
                 'tipos_carga': tipo_carga_id,
-                'categoria_carga': categoria_carga_id
+                'categoria_carga': categoria_carga_id, 
+                'consumo': consumo,
+                'precio': precio,
+                'paradas': paradas
             }}
         )
 
@@ -420,7 +446,10 @@ class DataManager:
             'hora_final': str(ruta_nueva.get('hora_final')),
             'ubicacion_fin': str(ruta_nueva.get('ubicacion_fin')),
             'tipos_carga': str(ruta_nueva.get('tipos_carga')),
-            'categoria_carga': str(ruta_nueva.get('categoria_carga'))
+            'categoria_carga': str(ruta_nueva.get('categoria_carga')), 
+            'consumo': str(ruta_nueva.get('consumo')),
+            'precio': str(ruta_nueva.get('precio')),
+            'paradas': str(ruta_nueva.get('paradas'))
         }
 
         # Llamar a la función para guardar la edición
@@ -450,7 +479,11 @@ class DataManager:
                 'hora_final': ruta['hora_final'],
                 'ubicacion_fin': ruta['ubicacion_fin'],
                 'tipos_carga': ruta['tipos_carga'],
+                'consumo': ruta['consumo'],
+                'precio': ruta['precio'],
+                'paradas': ruta['paradas'],
                 'categoria_carga': ruta['categoria_carga'],
+                'fecha_creacion': ruta['fecha_creacion'],
                 'fecha_eliminacion': datetime.utcnow()
             }
 

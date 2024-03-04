@@ -32,8 +32,10 @@ def add_ruta(data_manager):
     ubicacion_fin = request.form.get('ubicacion_fin')
     tipo_carga_id = int(request.form.get('tipo_carga'))
     categoria_carga_id = int(request.form.get('categoria_carga'))
-
-    data_manager.add_ruta(cliente_id, conductor_id, provincia_inicio_id, hora_inicio, ubicacion_inicio, provincia_fin_id, hora_fin, ubicacion_fin, tipo_carga_id, categoria_carga_id)
+    consumo = request.form.get('consumo')
+    precio = request.form.get('precio')
+    paradas = request.form.get('paradas')
+    data_manager.add_ruta(cliente_id, conductor_id, provincia_inicio_id, hora_inicio, ubicacion_inicio, provincia_fin_id, hora_fin, ubicacion_fin, tipo_carga_id, categoria_carga_id, consumo, precio, paradas)
     
     flash('Ruta agregada correctamente', 'success')
     return redirect(url_for('index_rutas'))
@@ -54,10 +56,14 @@ def update_ruta(mongo, ruta_id, data_manager):
         tipo_carga_id = int(request.form.get('tipo_carga'))
         categoria_carga_id = int(request.form.get('categoria_carga'))
 
+        consumo = request.form.get('consumo')
+        precio = request.form.get('precio')
+        paradas = request.form.get('paradas')
+
         data_manager.edit_ruta_by_id(
             ruta_id, cliente_id, conductor_id, provincia_inicio_id,
             hora_inicio, ubicacion_inicio, provincia_fin_id, hora_fin,
-            ubicacion_fin, tipo_carga_id, categoria_carga_id
+            ubicacion_fin, tipo_carga_id, categoria_carga_id, consumo, precio, paradas
         )
         
         flash('Ruta actualizada correctamente', 'success')
@@ -92,7 +98,9 @@ def delete_ruta(ruta_id, mongo, data_manager):
     provincia_fin_id = ruta.get('provincia_fin')
     tipo_carga_id = ruta.get('tipos_carga')
     categoria_carga_id = ruta.get('categoria_carga')
-
+    consumo = ruta.get('consumo')
+    precio = ruta.get('precio')
+    paradas = ruta.get('paradas')
     cliente = mongo.db.clientes.find_one({'_id': ObjectId(cliente_id)})
     
     conductor = mongo.db.conductores.find_one({'_id': ObjectId(conductor_id)})
@@ -110,6 +118,6 @@ def delete_ruta(ruta_id, mongo, data_manager):
     return render_template('rutas/eliminar.html', ruta=ruta, cliente=cliente, conductor=conductor,
                            provincia_inicio=provincia_inicio, provincia_final=provincia_final, tipo_carga=tipo_carga,
                            categoria_carga=categoria_carga, clientes=clientes, conductores=conductores,
-                           provincias=provincias, tipos_carga=tipos_carga, categorias_carga=categorias_carga,
+                           provincias=provincias, tipos_carga=tipos_carga, categorias_carga=categorias_carga, consumo=consumo, precio=precio, paradas=paradas,
                            url_for=url_for)
 
