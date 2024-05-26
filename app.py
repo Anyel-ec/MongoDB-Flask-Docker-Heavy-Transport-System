@@ -23,7 +23,6 @@ app.config['MONGO_URI'] = os.getenv('MONGO_URI')
 mongo = PyMongo(app)
 data_manager = DataManager(mongo)
 migrar_datos()
-#######################################################################################################################
 # Rutas del Trailer 
 @app.route('/')
 def index():

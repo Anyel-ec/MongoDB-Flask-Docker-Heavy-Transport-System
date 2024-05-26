@@ -479,11 +479,11 @@ class DataManager:
                 'hora_final': ruta['hora_final'],
                 'ubicacion_fin': ruta['ubicacion_fin'],
                 'tipos_carga': ruta['tipos_carga'],
-                'consumo': ruta['consumo'],
-                'precio': ruta['precio'],
-                'paradas': ruta['paradas'],
+                #'consumo': ruta['consumo'],
+                #'precio': ruta['precio'],
+                #'paradas': ruta['paradas'],
                 'categoria_carga': ruta['categoria_carga'],
-                'fecha_creacion': ruta['fecha_creacion'],
+                #'fecha_creacion': ruta['fecha_creacion'],
                 'fecha_eliminacion': datetime.utcnow()
             }
 
